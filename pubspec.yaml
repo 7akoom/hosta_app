@@ -1,0 +1,52 @@
+name: hosta_app
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.10
+  geolocator: ^10.1.0
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.6
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
+
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "#61A3FE"                     
+  color_dark: "#000000"               
+  image: assets/images/logo.png       
+  image_dark: assets/images/dark-logo.png 
+  android_gravity: center
+  ios_content_mode: scaleAspectFit
+
+  android_12:
+    color: "#61A3FE"
+    color_dark: "#000000"
+    image: assets/images/logo.png
+    image_dark: assets/images/dark-logo.png
+    icon_background_color: "#61A3FE"
+    icon_background_color_dark: "#000000"
+    
+
