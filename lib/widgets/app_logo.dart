@@ -12,6 +12,11 @@ class AppLogo extends StatelessWidget {
     final logoAsset = isDark
         ? 'assets/images/logo.svg'
         : 'assets/images/light-logo.svg';
-    return SvgPicture.asset(logoAsset, width: width, height: height);
+    return SvgPicture.asset(
+      logoAsset,
+      width: width,
+      height: height,
+      fit: BoxFit.contain,
+    );
   }
 }

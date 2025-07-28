@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -19,35 +25,33 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(
-                logoAsset,
-                //width: 100,
-                //height: 120,
-                fit: BoxFit.contain,
-              ),
+              SvgPicture.asset(logoAsset, fit: BoxFit.contain),
               const SizedBox(height: 48),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Choose a Language',
                     style: TextStyle(color: Colors.white),
                   ),
                   const SizedBox(width: 8),
-                  Text('|', style: TextStyle(color: Colors.white54)),
+                  const Text('|', style: TextStyle(color: Colors.white54)),
                   const SizedBox(width: 8),
-                  Text('اختر اللغة', style: TextStyle(color: Colors.white)),
+                  const Text(
+                    'اختر اللغة',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _langButton(context, 'EN'),
+                  _langButton('EN'),
                   const SizedBox(width: 16),
-                  _langButton(context, 'AR'),
+                  _langButton('AR'),
                   const SizedBox(width: 16),
-                  _langButton(context, 'KR'),
+                  _langButton('KR'),
                 ],
               ),
             ],
@@ -57,11 +61,16 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _langButton(BuildContext context, String code) {
+  Widget _langButton(String code) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return ElevatedButton(
-      onPressed: () {
-        Navigator.pushNamed(context, '/signup');
+      onPressed: () async {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('selected_language', code);
+
+        // استخدام context بعد التأكد من أنه لا يزال موجودًا
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, '/signup');
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,

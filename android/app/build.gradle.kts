@@ -8,6 +8,7 @@ plugins {
 }
 
 android {
+    compileSdk = 34
     namespace = "com.example.hosta_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
@@ -30,6 +31,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        targetSdk = 34
     }
 
     buildTypes {

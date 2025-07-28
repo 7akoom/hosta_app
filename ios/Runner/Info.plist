@@ -47,5 +47,16 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<!-- استخدام الموقع أثناء استخدام التطبيق -->
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>نحتاج إلى موقعك أثناء استخدام التطبيق لتحديد موقعك بدقة.</string>
+
+		<!-- استخدام الموقع دائمًا حتى في الخلفية -->
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>نحتاج إلى موقعك في الخلفية لتقديم تجربة أفضل وتحديد موقعك باستمرار.</string>
+
+		<!-- إذا كنت تستهدف iOS 11 أو أحدث -->
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>نحتاج إلى موقعك أثناء وبعد استخدام التطبيق لتقديم خدمات تتبع دقيقة.</string>
 	</dict>
 </plist>

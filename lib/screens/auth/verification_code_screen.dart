@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/app_logo.dart';
-import '../../theme/app_colors.dart';
+import 'package:hosta_app/widgets/app_logo.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
   final String destination;
@@ -25,11 +24,11 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   final List<FocusNode> _focusNodes = List.generate(5, (_) => FocusNode());
 
   void _checkAndNavigate() {
-    final code = _controllers.map((c) => c.text).join();
     final allFilled = _controllers.every((c) => c.text.length == 1);
     if (allFilled) {
       if (ModalRoute.of(context)?.isCurrent ?? true) {
         Future.delayed(const Duration(milliseconds: 200), () {
+          if (!mounted) return;
           Navigator.pushReplacementNamed(context, '/reset-password');
         });
       }
@@ -41,6 +40,8 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
     super.initState();
     if (widget.isPhone) {
       Future.delayed(const Duration(seconds: 2), () {
+        if (!mounted) return;
+
         const autoCode = "12345";
         for (int i = 0; i < codeLength; i++) {
           _controllers[i].text = autoCode[i];

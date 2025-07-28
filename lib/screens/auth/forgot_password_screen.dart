@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../widgets/app_logo.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/app_input_decoration.dart';
+import 'package:hosta_app/widgets/app_logo.dart';
+import 'package:hosta_app/theme/app_colors.dart';
+import 'package:hosta_app/theme/app_input_decoration.dart';
 import 'verification_code_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -23,6 +23,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final isDark = brightness == Brightness.dark;
+
+    Color selectedButtonBgColor = isDark
+        ? AppColors.white
+        : AppColors.primaryBlue;
+    Color selectedButtonTextColor = isDark ? Colors.black : Colors.white;
+    Color unselectedButtonBgColor = isDark ? Colors.black : Colors.white;
+    Color unselectedButtonTextColor = isDark ? Colors.white : Colors.black;
+    Color resetButtonBgColor = isDark ? AppColors.white : AppColors.primaryBlue;
+    Color resetButtonTextColor = isDark ? Colors.black : Colors.white;
+    Color backLinkColor = isDark ? Colors.white : AppColors.primaryBlue;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -31,8 +44,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 32),
-              Center(child: AppLogo(width: 120, height: 120)),
-              const SizedBox(height: 8),
+              Center(child: AppLogo(width: 50, height: 50)),
+              const SizedBox(height: 80),
               const Text(
                 "Choose email or phone number to reset your password",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -45,11 +58,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isEmailSelected
-                            ? AppColors.primaryBlue
-                            : Colors.grey[200],
+                            ? selectedButtonBgColor
+                            : unselectedButtonBgColor,
                         foregroundColor: isEmailSelected
-                            ? AppColors.white
-                            : AppColors.primaryBlue,
+                            ? selectedButtonTextColor
+                            : unselectedButtonTextColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -68,11 +81,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: !isEmailSelected
-                            ? AppColors.primaryBlue
-                            : Colors.grey[200],
+                            ? selectedButtonBgColor
+                            : unselectedButtonBgColor,
                         foregroundColor: !isEmailSelected
-                            ? AppColors.white
-                            : AppColors.primaryBlue,
+                            ? selectedButtonTextColor
+                            : unselectedButtonTextColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -100,14 +113,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 keyboardType: isEmailSelected
                     ? TextInputType.emailAddress
                     : TextInputType.phone,
+                style: TextStyle(color: isDark ? Colors.white : Colors.black),
               ),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryBlue,
-                    foregroundColor: AppColors.white,
+                    backgroundColor: resetButtonBgColor,
+                    foregroundColor: resetButtonTextColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -134,11 +148,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   onPressed: () {
                     Navigator.pushNamed(context, '/signin');
                   },
-                  child: const Text(
+                  child: Text(
                     "Back to signin",
                     style: TextStyle(
-                      color: AppColors.primaryBlue,
+                      color: backLinkColor,
                       decoration: TextDecoration.underline,
+                      decorationColor: backLinkColor,
                     ),
                   ),
                 ),
