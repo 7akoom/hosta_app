@@ -1,16 +1,105 @@
-# hosta_app
+# Hosta Services App
 
-A new Flutter project.
+تطبيق خدمات منزلية يربط بين مقدمي الخدمات والعملاء.
 
-## Getting Started
+## هيكلية المشروع
 
-This project is a starting point for a Flutter application.
+```
+lib/
+├── core/                 # المكونات الأساسية
+│   ├── config/          # ملفات التكوين
+│   ├── constants/       # الثوابت
+│   ├── di/             # حقن التبعيات
+│   ├── errors/         # معالجة الأخطاء
+│   ├── interceptors/   # معترضات الشبكة
+│   └── utils/          # أدوات مساعدة
+│
+├── data/                # طبقة البيانات
+│   ├── datasources/    # مصادر البيانات
+│   ├── models/         # نماذج البيانات
+│   ├── repositories/   # مستودعات البيانات
+│   └── static/         # البيانات الثابتة
+│
+├── presentation/        # طبقة العرض
+│   ├── providers/      # مزودي الحالة
+│   ├── blocs/          # BLoC (إذا تم استخدامه)
+│   └── cubits/         # Cubit (إذا تم استخدامه)
+│
+├── screens/            # شاشات التطبيق
+│   ├── auth/          # شاشات المصادقة
+│   ├── home/          # شاشات الرئيسية
+│   ├── profile/       # شاشات الملف
+│   ├── chat/          # شاشات المحادثة
+│   └── shared/        # شاشات مشتركة
+│
+├── theme/              # تنسيق التطبيق
+│   ├── app_colors.dart
+│   ├── app_theme.dart
+│   └── app_styles.dart
+│
+├── widgets/            # الودجات المشتركة
+│   ├── buttons/
+│   ├── cards/
+│   ├── dialogs/
+│   └── inputs/
+│
+└── routes/             # التنقل بين الشاشات
+    └── app_routes.dart
+```
 
-A few resources to get you started if this is your first Flutter project:
+## المميزات
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- مصادقة المستخدمين (تسجيل الدخول، التسجيل، إعادة تعيين كلمة المرور)
+- البحث عن مقدمي الخدمات
+- حجز الخدمات
+- المحادثات المباشرة
+- المفضلة
+- التقييمات والمراجعات
+- إدارة الملف الشخصي
+- الإشعارات
+- السمة الداكنة/الفاتحة
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## التقنيات المستخدمة
+
+- Flutter
+- Provider (إدارة الحالة)
+- Dio (طلبات HTTP)
+- GetIt (حقن التبعيات)
+- SharedPreferences (التخزين المحلي)
+- WebSocket (للمحادثات المباشرة)
+
+## التثبيت
+
+1. تأكد من تثبيت Flutter SDK
+2. استنسخ المشروع:
+   ```bash
+   git clone https://github.com/username/hosta_app.git
+   ```
+3. ثبت التبعيات:
+   ```bash
+   flutter pub get
+   ```
+4. شغل التطبيق:
+   ```bash
+   flutter run
+   ```
+
+## التكوين
+
+1. انسخ ملف `.env.example` إلى `.env`
+2. عدل المتغيرات حسب بيئتك:
+   ```
+   API_BASE_URL=https://api.hosta.com
+   API_VERSION=v1
+   ```
+
+## المساهمة
+
+1. افتح فرع جديد لميزتك
+2. قم بالتغييرات
+3. تأكد من اجتياز الاختبارات
+4. أرسل طلب سحب
+
+## الترخيص
+
+هذا المشروع مرخص تحت [MIT License](LICENSE).

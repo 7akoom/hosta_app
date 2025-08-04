@@ -2,6 +2,7 @@
     <application
         android:label="Hosta"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
@@ -41,6 +42,12 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- الموقع في الخلفية -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!-- صلاحية الإنترنت -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- صلاحية الوصول للشبكة -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+
 
 
     <!-- Required to query activities that can process text, see:
@@ -53,5 +60,6 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+
     </queries>
 </manifest>
