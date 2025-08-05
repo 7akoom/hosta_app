@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hosta_app/theme/app_colors.dart';
+import 'package:hosta_app/presentation/providers/auth_provider.dart';
 import 'package:hosta_app/data/models/chat_model.dart';
 import 'package:hosta_app/data/models/provider_model.dart';
 import 'package:hosta_app/presentation/providers/chat_provider.dart';
@@ -28,8 +29,19 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeChat();
+      _checkAuthAndInitialize();
     });
+  }
+
+  Future<void> _checkAuthAndInitialize() async {
+    if (!mounted) return;
+    final authProvider = context.read<AuthProvider>();
+    if (!authProvider.isAuthenticated) {
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/signin');
+      return;
+    }
+    await _initializeChat();
   }
 
   @override
@@ -58,13 +70,14 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _sendMessage() async {
+    if (!mounted) return;
     final message = _messageController.text.trim();
     if (message.isEmpty) return;
 
     final chatProvider = context.read<ChatProvider>();
     final success = await chatProvider.sendMessage(message);
-    
-    if (success) {
+
+    if (success && mounted) {
       _messageController.clear();
       _scrollToBottom();
     }
@@ -132,10 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 Text(
                   'Service Provider',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -153,10 +163,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return const Center(
         child: Text(
           'ابدأ المحادثة الآن!',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey,
-          ),
+          style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
     }
@@ -168,7 +175,7 @@ class _ChatScreenState extends State<ChatScreen> {
       itemBuilder: (context, index) {
         final message = messages[index];
         final isUserMessage = message.senderType == 'user';
-        
+
         return _buildMessageBubble(message, isUserMessage);
       },
     );
@@ -181,8 +188,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: Row(
-        mainAxisAlignment: isUserMessage 
-            ? MainAxisAlignment.end 
+        mainAxisAlignment: isUserMessage
+            ? MainAxisAlignment.end
             : MainAxisAlignment.start,
         children: [
           if (!isUserMessage) ...[
@@ -200,9 +207,7 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: BoxDecoration(
                 color: isUserMessage
                     ? AppColors.primaryBlue
-                    : (isDark 
-                        ? Colors.grey[800] 
-                        : Colors.grey[200]),
+                    : (isDark ? Colors.grey[800] : Colors.grey[200]),
                 borderRadius: BorderRadius.circular(18),
               ),
               child: Column(
@@ -211,8 +216,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   Text(
                     message.content,
                     style: TextStyle(
-                      color: isUserMessage 
-                          ? Colors.white 
+                      color: isUserMessage
+                          ? Colors.white
                           : (isDark ? Colors.white : Colors.black87),
                       fontSize: 14,
                     ),
@@ -221,9 +226,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   Text(
                     _formatTime(message.timestamp),
                     style: TextStyle(
-                      color: isUserMessage 
-                          ? Colors.white70 
-                          : Colors.grey[600],
+                      color: isUserMessage ? Colors.white70 : Colors.grey[600],
                       fontSize: 11,
                     ),
                   ),
@@ -250,10 +253,7 @@ class _ChatScreenState extends State<ChatScreen> {
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         border: Border(
-          top: BorderSide(
-            color: Colors.grey.withValues(alpha: 0.2),
-            width: 1,
-          ),
+          top: BorderSide(color: Colors.grey.withValues(alpha: 0.2), width: 1),
         ),
       ),
       child: Row(
@@ -288,11 +288,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: IconButton(
               onPressed: _sendMessage,
-              icon: const Icon(
-                Icons.send,
-                color: Colors.white,
-                size: 20,
-              ),
+              icon: const Icon(Icons.send, color: Colors.white, size: 20),
             ),
           ),
         ],
@@ -314,4 +310,4 @@ class _ChatScreenState extends State<ChatScreen> {
       return 'الآن';
     }
   }
-} 
+}

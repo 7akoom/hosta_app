@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/data/models/provider_model.dart';
 import 'package:hosta_app/data/models/service_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hosta_app/shared/widgets/cached_network_image_widget.dart';
+import 'package:hosta_app/presentation/providers/auth_provider.dart';
 
 class ProviderDetailsScreen extends StatefulWidget {
   final String providerId;
@@ -157,19 +158,21 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                   ),
                 ],
               ),
-              child: _provider!.image != null
-                  ? Image.asset(
-                      _provider!.image!,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    )
-                  : Image.asset(
-                      'assets/images/logo.png',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
+              child: ClipOval(
+                child: _provider!.image != null
+                    ? Image.asset(
+                        _provider!.image!,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        'assets/images/logo.png',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+              ),
             ),
           ),
           const SizedBox(height: 20),
@@ -215,6 +218,35 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                 ),
                 child: IconButton(
                   onPressed: () {
+                    final authProvider = context.read<AuthProvider>();
+                    if (!authProvider.isAuthenticated) {
+                      // Show dialog and redirect to sign in
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Sign in Required'),
+                          content: const Text(
+                            'Please sign in to chat with service providers.',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cancel'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context); // Close dialog
+                                Navigator.pushNamed(context, '/signin');
+                              },
+                              child: const Text('Sign in'),
+                            ),
+                          ],
+                        ),
+                      );
+                      return;
+                    }
+
+                    // If authenticated, proceed to chat
                     Navigator.pushNamed(
                       context,
                       '/chat',
@@ -511,12 +543,17 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                     Container(
                       width: 60,
                       height: 60,
-                      decoration: BoxDecoration(shape: BoxShape.circle),
-                      child: Image.asset(
-                        provider.image ?? 'assets/images/logo.png',
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          provider.image ?? 'assets/images/logo.png',
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),

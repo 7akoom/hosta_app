@@ -64,14 +64,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget _langButton(String code) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return ElevatedButton(
-      onPressed: () async {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('selected_language', code);
-
-        // استخدام context بعد التأكد من أنه لا يزال موجودًا
-        if (!mounted) return;
-        Navigator.pushReplacementNamed(context, '/signup');
-      },
+      onPressed: () => _selectLanguage(code),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
         foregroundColor: isDark ? Colors.black : Colors.blue,
@@ -80,5 +73,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ),
       child: Text(code, style: const TextStyle(fontWeight: FontWeight.bold)),
     );
+  }
+
+  Future<void> _selectLanguage(String code) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      // حفظ اللغة المختارة
+      await prefs.setString('selected_language', code);
+
+      if (!mounted) return;
+
+      // التوجيه إلى الشاشة الرئيسية
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to save language preference'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 }

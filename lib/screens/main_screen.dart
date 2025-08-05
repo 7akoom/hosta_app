@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:hosta_app/widgets/custom_bottom_navigation.dart';
 import 'package:hosta_app/screens/home_screen.dart';
 import 'package:hosta_app/screens/my_services_screen.dart';
@@ -26,13 +27,47 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  DateTime? _lastBackPressTime;
+
+  bool _handleBackPress(BuildContext context) {
+    if (_selectedIndex != 0) {
+      // إذا لم نكن في الشاشة الرئيسية، نعود إليها
+      setState(() {
+        _selectedIndex = 0;
+      });
+      return false;
+    }
+
+    // في الشاشة الرئيسية، نتحقق من النقر المزدوج
+    final now = DateTime.now();
+    if (_lastBackPressTime == null ||
+        now.difference(_lastBackPressTime!) > const Duration(seconds: 2)) {
+      _lastBackPressTime = now;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('اضغط مرة أخرى للخروج'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: CustomBottomNavigation(
-        currentIndex: _selectedIndex,
-        onTap: _onBottomNavTap,
+    return WillPopScope(
+      onWillPop: () async {
+        return !_handleBackPress(context);
+      },
+      child: Scaffold(
+        body: _screens[_selectedIndex],
+        bottomNavigationBar: CustomBottomNavigation(
+          currentIndex: _selectedIndex,
+          onTap: _onBottomNavTap,
+        ),
       ),
     );
   }

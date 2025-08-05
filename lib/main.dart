@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:developer' show log;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hosta_app/core/di/injection_container.dart' as di;
@@ -18,18 +20,37 @@ void main() async {
   // Initialize dependencies
   await di.initializeDependencies();
 
-  // Get initial route based on authentication status
-  final prefs = di.getIt<SharedPreferences>();
-  final selectedLang = prefs.getString('selected_language');
+  // Get initial route based on user status
+  final prefs = await SharedPreferences.getInstance();
+
+  // في وضع التصحيح، نقوم بمسح التفضيلات
+  if (kDebugMode) {
+    await prefs.clear();
+    log('Cleared all preferences', name: 'AppInit');
+  }
+
+  final hasLanguage = prefs.getString('selected_language') != null;
   final hasToken = prefs.getString('access_token') != null;
 
-  runApp(
-    MyApp(
-      initialRoute: hasToken
-          ? '/home'
-          : (selectedLang == null ? '/' : '/signin'),
-    ),
+  // تسجيل القيم للتحقق في وضع التصحيح
+  log(
+    'Initial app state - Language: $hasLanguage, Token: $hasToken',
+    name: 'AppInit',
   );
+
+  String initialRoute;
+  if (!hasLanguage) {
+    // First time user - show language selection
+    initialRoute = '/';
+  } else if (hasToken) {
+    // Logged in user - go directly to home
+    initialRoute = '/home';
+  } else {
+    // Has language but no token - go to home as guest
+    initialRoute = '/home';
+  }
+
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
 class MyApp extends StatelessWidget {

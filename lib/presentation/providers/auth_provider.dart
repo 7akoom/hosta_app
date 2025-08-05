@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/user_model.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../core/errors/network_exception.dart';
@@ -10,23 +11,27 @@ class AuthProvider extends ChangeNotifier {
   final AuthRepository _authRepository;
 
   AuthProvider(this._authRepository) {
-    // Initialize with a default user for demonstration
-    _initializeDefaultUser();
+    _initializeAuthState();
   }
 
-  // Initialize default user for demonstration
-  void _initializeDefaultUser() {
-    _user = UserModel(
-      id: '1',
-      name: 'Hassan AlBony',
-      email: 'hassan@example.com',
-      phone: '+9647501234567',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      city: 'Erbil',
-      address: 'Erbil, Iraq',
-    );
+  Future<void> _initializeAuthState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('access_token');
+
+    if (token != null) {
+      try {
+        // يمكنك إضافة دالة في AuthRepository للتحقق من صلاحية التوكن
+        // وجلب بيانات المستخدم من الباك إند
+        // _user = await _authRepository.getUserProfile();
+      } catch (e) {
+        // في حالة حدوث خطأ، نقوم بمسح التوكن
+        await prefs.remove('access_token');
+        _user = null;
+      }
+    } else {
+      _user = null;
+    }
+    notifyListeners();
   }
 
   // Getters
@@ -96,7 +101,7 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       await _authRepository.signOut();
-      _initializeDefaultUser(); // For demo, in real app: _user = null;
+      _user = null;
       _error = null;
     } catch (e) {
       _error = e is NetworkException ? e.message : 'Sign out failed';
@@ -150,9 +155,11 @@ class AuthProvider extends ChangeNotifier {
     return _user != null;
   }
 
-  // Reset to default user (for demonstration)
-  void resetToDefaultUser() {
-    _initializeDefaultUser();
+  // Reset auth state
+  Future<void> resetAuthState() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('access_token');
+    _user = null;
     notifyListeners();
   }
 }

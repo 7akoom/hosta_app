@@ -4,9 +4,14 @@ import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/presentation/providers/auth_provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +20,10 @@ class ProfileScreen extends StatelessWidget {
         builder: (context, authProvider, child) {
           final user = authProvider.user;
           if (user == null) {
-            return const Center(
-              child: Text('Please sign in to view your profile'),
-            );
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/signin');
+            });
+            return const Center(child: CircularProgressIndicator());
           }
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -214,6 +220,46 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  void _handleSignOut(BuildContext context, AuthProvider authProvider) {
+    // Get navigator state before async operations
+    final navigator = Navigator.of(context);
+
+    showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Sign Out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Sign Out', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    ).then((shouldSignOut) {
+      if (shouldSignOut == true) {
+        // Use a separate method for sign out logic
+        _performSignOut(authProvider, navigator);
+      }
+    });
+  }
+
+  Future<void> _performSignOut(
+    AuthProvider authProvider,
+    NavigatorState navigator,
+  ) async {
+    await authProvider.signOut();
+    if (mounted) {
+      navigator
+        ..pop() // Close current screen
+        ..pushNamedAndRemoveUntil('/signin', (route) => false);
+    }
+  }
+
   Widget _buildAccountActions(BuildContext context, AuthProvider authProvider) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
@@ -260,39 +306,7 @@ class ProfileScreen extends StatelessWidget {
                     : AppColors.dark.withAlpha((255 * 0.7).toInt()),
               ),
             ),
-            onTap: () async {
-              final shouldSignOut = await showDialog<bool>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Sign Out'),
-                  content: const Text('Are you sure you want to sign out?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, false),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, true),
-                      child: const Text(
-                        'Sign Out',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-
-              if (shouldSignOut == true && context.mounted) {
-                await authProvider.signOut();
-                if (context.mounted) {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/signin',
-                    (route) => false,
-                  );
-                }
-              }
-            },
+            onTap: () => _handleSignOut(context, authProvider),
           ),
         ],
       ),

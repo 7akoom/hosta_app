@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hosta_app/screens/welcome_screen.dart';
+import 'package:hosta_app/screens/main_screen.dart';
 import 'package:hosta_app/screens/auth/forgot_password_screen.dart';
 import 'package:hosta_app/screens/auth/reset_password_screen.dart';
 import 'package:hosta_app/screens/auth/signin_screen.dart';
 import 'package:hosta_app/screens/auth/signup_screen.dart';
 import 'package:hosta_app/screens/auth/verification_code_screen.dart';
-import 'package:hosta_app/screens/home_screen.dart';
+
 import 'package:hosta_app/screens/category_details_screen.dart';
 import 'package:hosta_app/screens/service_details_screen.dart';
 import 'package:hosta_app/screens/provider_details_screen.dart';
@@ -12,7 +14,6 @@ import 'package:hosta_app/screens/provider_reviews_screen.dart';
 import 'package:hosta_app/screens/search_screen.dart';
 import 'package:hosta_app/screens/profile_screen.dart';
 import 'package:hosta_app/screens/chat_screen.dart';
-import 'package:hosta_app/screens/main_screen.dart';
 import 'package:hosta_app/screens/book_service_screen.dart';
 import 'package:hosta_app/screens/schedule_screen.dart';
 import 'package:hosta_app/screens/my_services_screen.dart';
@@ -54,7 +55,7 @@ class AppRoutes {
     final name = routeSettings.name ?? '/';
 
     if (name == welcome) {
-      return MaterialPageRoute(builder: (_) => const MainScreen());
+      return MaterialPageRoute(builder: (_) => const WelcomeScreen());
     }
 
     if (name == signin) {
@@ -84,7 +85,7 @@ class AppRoutes {
     }
 
     if (name == home) {
-      return MaterialPageRoute(builder: (_) => const HomeScreen());
+      return MaterialPageRoute(builder: (_) => const MainScreen());
     }
 
     if (name == categoryDetails) {
