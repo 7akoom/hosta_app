@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/data/models/provider_model.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class ProviderReviewsScreen extends StatefulWidget {
   final ProviderModel provider;
@@ -94,7 +95,11 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.provider_reviews_page_title ??
+            'تقييمات المزود',
+      ),
       body: Column(
         children: [
           // Header Section

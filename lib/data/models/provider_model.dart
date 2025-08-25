@@ -13,6 +13,7 @@ class ProviderModel {
   final DateTime updatedAt;
   final String? description;
   final List<String>? specializations;
+  final List<String>? languages;
   final Map<String, dynamic>? additionalInfo;
 
   const ProviderModel({
@@ -30,6 +31,7 @@ class ProviderModel {
     required this.updatedAt,
     this.description,
     this.specializations,
+    this.languages,
     this.additionalInfo,
   });
 
@@ -51,6 +53,9 @@ class ProviderModel {
       specializations: json['specializations'] != null
           ? List<String>.from(json['specializations'] as List)
           : null,
+      languages: json['languages'] != null
+          ? List<String>.from(json['languages'] as List)
+          : null,
       additionalInfo: json['additional_info'] as Map<String, dynamic>?,
     );
   }
@@ -71,6 +76,7 @@ class ProviderModel {
       'updated_at': updatedAt.toIso8601String(),
       'description': description,
       'specializations': specializations,
+      'languages': languages,
       'additional_info': additionalInfo,
     };
   }
@@ -90,6 +96,7 @@ class ProviderModel {
     DateTime? updatedAt,
     String? description,
     List<String>? specializations,
+    List<String>? languages,
     Map<String, dynamic>? additionalInfo,
   }) {
     return ProviderModel(
@@ -107,13 +114,14 @@ class ProviderModel {
       updatedAt: updatedAt ?? this.updatedAt,
       description: description ?? this.description,
       specializations: specializations ?? this.specializations,
+      languages: languages ?? this.languages,
       additionalInfo: additionalInfo ?? this.additionalInfo,
     );
   }
 
   @override
   String toString() {
-    return 'ProviderModel(id: $id, name: $name, email: $email, phone: $phone, address: $address, image: $image, rating: $rating, price: $price, serviceId: $serviceId, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, description: $description, specializations: $specializations, additionalInfo: $additionalInfo)';
+    return 'ProviderModel(id: $id, name: $name, email: $email, phone: $phone, address: $address, image: $image, rating: $rating, price: $price, serviceId: $serviceId, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, description: $description, specializations: $specializations, languages: $languages, additionalInfo: $additionalInfo)';
   }
 
   @override
@@ -124,4 +132,4 @@ class ProviderModel {
 
   @override
   int get hashCode => id.hashCode;
-} 
+}

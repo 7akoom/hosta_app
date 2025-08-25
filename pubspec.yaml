@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_svg: ^2.0.10
   geolocator: ^14.0.2
   cupertino_icons: ^1.0.8
@@ -22,7 +24,7 @@ dependencies:
   cached_network_image: ^3.3.1
   shimmer: ^3.0.0
   table_calendar: ^3.0.9
-  intl: ^0.19.0
+  intl: ^0.20.2
   get_it: ^7.6.7
   dio: ^5.4.1
 
@@ -35,9 +37,31 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/images/
     - assets/icons/
+    - assets/fonts/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+    - family: Mirza
+      fonts:
+        - asset: assets/fonts/Mirza-Regular.ttf
+        - asset: assets/fonts/Mirza-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Mirza-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Mirza-Bold.ttf
+          weight: 700
 
 flutter_launcher_icons:
   android: "launcher_icon"

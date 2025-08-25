@@ -19,27 +19,41 @@ class CategoryProvider extends ChangeNotifier {
 
   // Clear error
   void clearError() {
-    _error = null;
-    notifyListeners();
+    if (_error != null) {
+      _error = null;
+      notifyListeners();
+    }
   }
 
   // Load categories
   Future<void> loadCategories() async {
+    if (_isLoading) return; // Prevent multiple simultaneous loads
+
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
       // TODO: Replace with actual API call when backend is ready
-      // For now, use static data
-      await Future.delayed(const Duration(seconds: 1));
-      
-      _categories = _getStaticCategories();
-      _isLoading = false;
-      notifyListeners();
+      // For now, use static data with minimal delay
+      await Future.delayed(
+        const Duration(milliseconds: 100), // Reduced delay for better UX
+      );
+
+      final newCategories = _getStaticCategories();
+
+      // Only notify if data actually changed
+      if (!listEquals(_categories, newCategories)) {
+        _categories = newCategories;
+        _isLoading = false;
+        notifyListeners();
+      } else {
+        _isLoading = false;
+        notifyListeners();
+      }
     } catch (e) {
-      _isLoading = false;
       _error = e is NetworkException ? e.message : 'An error occurred';
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -56,17 +70,20 @@ class CategoryProvider extends ChangeNotifier {
   // Search categories
   List<CategoryModel> searchCategories(String query) {
     if (query.isEmpty) return _categories;
-    
+
     return _categories.where((category) {
       return category.name.toLowerCase().contains(query.toLowerCase()) ||
-             (category.description?.toLowerCase().contains(query.toLowerCase()) ?? false);
+          (category.description?.toLowerCase().contains(query.toLowerCase()) ??
+              false);
     }).toList();
   }
 
   // Clear categories
   void clearCategories() {
-    _categories = [];
-    notifyListeners();
+    if (_categories.isNotEmpty) {
+      _categories = [];
+      notifyListeners();
+    }
   }
 
   // Refresh categories
@@ -77,7 +94,7 @@ class CategoryProvider extends ChangeNotifier {
   // Static data generation
   List<CategoryModel> _getStaticCategories() {
     final now = DateTime.now();
-    
+
     return [
       CategoryModel(
         id: '1',
@@ -85,6 +102,7 @@ class CategoryProvider extends ChangeNotifier {
         description: 'Professional cleaning services for your home and office',
         icon: 'assets/icons/cleaning.svg',
         isActive: true,
+        serviceCount: 15,
         createdAt: now,
         updatedAt: now,
       ),
@@ -94,6 +112,7 @@ class CategoryProvider extends ChangeNotifier {
         description: 'Expert plumbing and pipe repair services',
         icon: 'assets/icons/plumber.svg',
         isActive: true,
+        serviceCount: 12,
         createdAt: now,
         updatedAt: now,
       ),
@@ -103,6 +122,7 @@ class CategoryProvider extends ChangeNotifier {
         description: 'Licensed electrical contractors and repair services',
         icon: 'assets/icons/electrican.svg',
         isActive: true,
+        serviceCount: 8,
         createdAt: now,
         updatedAt: now,
       ),
@@ -112,6 +132,7 @@ class CategoryProvider extends ChangeNotifier {
         description: 'Professional painting and decorating services',
         icon: 'assets/icons/painting.svg',
         isActive: true,
+        serviceCount: 10,
         createdAt: now,
         updatedAt: now,
       ),
@@ -121,6 +142,7 @@ class CategoryProvider extends ChangeNotifier {
         description: 'Landscape design and garden maintenance services',
         icon: 'assets/icons/gardining.svg',
         isActive: true,
+        serviceCount: 6,
         createdAt: now,
         updatedAt: now,
       ),
@@ -130,6 +152,7 @@ class CategoryProvider extends ChangeNotifier {
         description: 'Professional moving and relocation services',
         icon: 'assets/icons/homerepair.svg',
         isActive: true,
+        serviceCount: 4,
         createdAt: now,
         updatedAt: now,
       ),
@@ -139,6 +162,7 @@ class CategoryProvider extends ChangeNotifier {
         description: 'Professional childcare and babysitting services',
         icon: 'assets/icons/babysitting.svg',
         isActive: true,
+        serviceCount: 20,
         createdAt: now,
         updatedAt: now,
       ),
@@ -148,9 +172,10 @@ class CategoryProvider extends ChangeNotifier {
         description: 'Professional car washing and detailing services',
         icon: 'assets/icons/carwash.svg',
         isActive: true,
+        serviceCount: 7,
         createdAt: now,
         updatedAt: now,
       ),
     ];
   }
-} 
+}

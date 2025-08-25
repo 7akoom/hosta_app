@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/screens/provider_feedback_screen.dart';
@@ -51,8 +52,11 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a valid amount'),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)?.please_enter_a_valid_amount ??
+                'Please enter a valid amount',
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -89,14 +93,18 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                 child: const Icon(Icons.check, color: Colors.white, size: 36),
               ),
               const SizedBox(height: 24),
-              const Text(
-                'Payment Confirmed',
+              Text(
+                AppLocalizations.of(context)?.payment_confirmed ??
+                    'Payment Confirmed',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Thank you for confirming the payment.',
+              Text(
+                AppLocalizations.of(
+                      context,
+                    )?.thank_you_for_confirming_payment ??
+                    'Thank you for confirming the payment.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
@@ -125,8 +133,8 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Done',
+                  child: Text(
+                    AppLocalizations.of(context)?.done ?? 'Done',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -190,7 +198,11 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.confirm_payment_page_title ??
+            'تأكيد الدفع',
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -210,7 +222,8 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Confirm Payment',
+              AppLocalizations.of(context)?.confirm_payment ??
+                  'Confirm Payment',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -235,7 +248,8 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Payment Amount',
+                    AppLocalizations.of(context)?.payment_amount ??
+                        'Payment Amount',
                     style: TextStyle(
                       fontSize: 16,
                       color: isDark
@@ -294,7 +308,8 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Payment Details',
+                    AppLocalizations.of(context)?.payment_details ??
+                        'Payment Details',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -304,14 +319,14 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                   const SizedBox(height: 16),
                   _buildDetailRow(
                     context,
-                    'Booking ID',
+                    AppLocalizations.of(context)?.booking_id ?? 'Booking ID',
                     '#${widget.bookingId}',
                     isDark,
                   ),
                   const SizedBox(height: 12),
                   _buildDetailRow(
                     context,
-                    'Provider',
+                    AppLocalizations.of(context)?.provider ?? 'Provider',
                     widget.providerName,
                     isDark,
                   ),
@@ -341,8 +356,9 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                           ),
                         ),
                       )
-                    : const Text(
-                        'Confirm Payment',
+                    : Text(
+                        AppLocalizations.of(context)?.confirm_payment_button ??
+                            'Confirm Payment',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

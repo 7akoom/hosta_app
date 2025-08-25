@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:intl/intl.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class MyServicesScreen extends StatelessWidget {
   const MyServicesScreen({super.key});
@@ -21,18 +22,18 @@ class MyServicesScreen extends StatelessWidget {
     }
   }
 
-  String _getStatusText(String status) {
+  String _getStatusText(String status, BuildContext context) {
     switch (status) {
       case 'pending':
-        return 'Pending';
+        return AppLocalizations.of(context)?.pending ?? 'Pending';
       case 'completed':
-        return 'Completed';
+        return AppLocalizations.of(context)?.completed ?? 'Completed';
       case 'cancelled':
-        return 'Cancelled';
+        return AppLocalizations.of(context)?.cancelled ?? 'Cancelled';
       case 'in_progress':
-        return 'In Progress';
+        return AppLocalizations.of(context)?.in_progress ?? 'In Progress';
       default:
-        return 'Unknown';
+        return AppLocalizations.of(context)?.unknown ?? 'Unknown';
     }
   }
 
@@ -59,7 +60,9 @@ class MyServicesScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title: AppLocalizations.of(context)?.my_services_page_title ?? 'خدماتي',
+      ),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: bookings.length,
@@ -93,7 +96,8 @@ class MyServicesScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Service ID',
+                            AppLocalizations.of(context)?.service_id ??
+                                'Service ID',
                             style: TextStyle(
                               fontSize: 12,
                               color: isDark
@@ -131,7 +135,8 @@ class MyServicesScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'Date & Time',
+                          AppLocalizations.of(context)?.date_time ??
+                              'Date & Time',
                           style: TextStyle(
                             fontSize: 12,
                             color: isDark
@@ -181,7 +186,7 @@ class MyServicesScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Price:',
+                          AppLocalizations.of(context)?.price ?? 'Price:',
                           style: TextStyle(
                             fontSize: 12,
                             color: isDark
@@ -210,7 +215,10 @@ class MyServicesScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            _getStatusText(booking['status'] as String),
+                            _getStatusText(
+                              booking['status'] as String,
+                              context,
+                            ),
                             style: TextStyle(
                               fontSize: 12,
                               color: _getStatusColor(
@@ -249,7 +257,9 @@ class MyServicesScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text('Cancel'),
+                        child: Text(
+                          AppLocalizations.of(context)?.cancel ?? 'Cancel',
+                        ),
                       ),
                   ],
                 ),

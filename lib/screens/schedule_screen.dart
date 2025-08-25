@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -41,7 +42,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.schedule_page_title ??
+            'الجدول الزمني',
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +113,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'Available Times:',
+                  AppLocalizations.of(context)?.available_times ??
+                      'Available Times:',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -191,9 +197,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
                           // عرض رسالة نجاح
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Booking created successfully'),
-                              duration: Duration(seconds: 2),
+                            SnackBar(
+                              content: Text(
+                                AppLocalizations.of(
+                                      context,
+                                    )?.booking_created_successfully ??
+                                    'Booking created successfully',
+                              ),
+                              duration: const Duration(seconds: 2),
                             ),
                           );
 
@@ -215,8 +226,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         ? AppColors.dark.withAlpha((255 * 0.1).toInt())
                         : Colors.grey[300],
                   ),
-                  child: const Text(
-                    'Confirm',
+                  child: Text(
+                    AppLocalizations.of(context)?.confirm ?? 'Confirm',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -238,16 +249,24 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           fontSize: 12,
                           color: isDark ? AppColors.white : AppColors.dark,
                         ),
-                        children: const [
+                        children: [
                           TextSpan(
-                            text: 'Free Cancellation\n',
+                            text:
+                                AppLocalizations.of(
+                                  context,
+                                )?.free_cancellation ??
+                                'Free Cancellation\n',
                             style: TextStyle(
                               color: Colors.red,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           TextSpan(
-                            text: 'Cancel before May 1st (5H) For full refund.',
+                            text:
+                                AppLocalizations.of(
+                                  context,
+                                )?.cancel_before_for_full_refund ??
+                                'Cancel before May 1st (5H) For full refund.',
                           ),
                         ],
                       ),

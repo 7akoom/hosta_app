@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 import 'package:hosta_app/widgets/app_logo.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
@@ -109,8 +110,8 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   @override
   Widget build(BuildContext context) {
     String displayText = widget.isPhone
-        ? "We have sent you a 5 digit verification code on\n${widget.destination}"
-        : "We have sent you a 5 digit verification code to\n${widget.destination}";
+        ? "${AppLocalizations.of(context)?.verification_code_sent_phone ?? "We have sent you a 5 digit verification code on"}\n${widget.destination}"
+        : "${AppLocalizations.of(context)?.verification_code_sent_email ?? "We have sent you a 5 digit verification code to"}\n${widget.destination}";
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -121,9 +122,13 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
               const SizedBox(height: 32),
               Center(child: AppLogo(width: 120, height: 120)),
               const SizedBox(height: 24),
-              const Text(
-                "Enter verification code",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              Text(
+                AppLocalizations.of(context)?.enter_verification_code ??
+                    "Enter verification code",
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               Text(

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/presentation/providers/auth_provider.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -56,7 +57,12 @@ class _AccountScreenState extends State<AccountScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Information updated successfully')),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)?.information_updated_successfully ??
+                'Information updated successfully',
+          ),
+        ),
       );
       Navigator.pop(context);
     } catch (e) {
@@ -77,19 +83,23 @@ class _AccountScreenState extends State<AccountScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Update Email'),
+        title: Text(
+          AppLocalizations.of(context)?.update_email ?? 'Update Email',
+        ),
         content: TextFormField(
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(
-            labelText: 'New Email',
-            hintText: 'Enter your new email',
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)?.new_email ?? 'New Email',
+            hintText:
+                AppLocalizations.of(context)?.enter_your_new_email ??
+                'Enter your new email',
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancel'),
           ),
           ElevatedButton(
             onPressed: _isLoading
@@ -101,7 +111,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('Update'),
+                : Text(AppLocalizations.of(context)?.update ?? 'Update'),
           ),
         ],
       ),
@@ -114,19 +124,23 @@ class _AccountScreenState extends State<AccountScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Update Phone'),
+        title: Text(
+          AppLocalizations.of(context)?.update_phone ?? 'Update Phone',
+        ),
         content: TextFormField(
           controller: _phoneController,
           keyboardType: TextInputType.phone,
-          decoration: const InputDecoration(
-            labelText: 'New Phone',
-            hintText: 'Enter your new phone number',
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)?.new_phone ?? 'New Phone',
+            hintText:
+                AppLocalizations.of(context)?.enter_your_new_phone ??
+                'Enter your new phone number',
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancel'),
           ),
           ElevatedButton(
             onPressed: _isLoading
@@ -138,7 +152,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('Update'),
+                : Text(AppLocalizations.of(context)?.update ?? 'Update'),
           ),
         ],
       ),
@@ -149,7 +163,9 @@ class _AccountScreenState extends State<AccountScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Update Password'),
+        title: Text(
+          AppLocalizations.of(context)?.update_password ?? 'Update Password',
+        ),
         content: Form(
           key: _formKey,
           child: Column(
@@ -159,8 +175,14 @@ class _AccountScreenState extends State<AccountScreen> {
                 controller: _oldPasswordController,
                 obscureText: !_showOldPassword,
                 decoration: InputDecoration(
-                  labelText: 'Current Password',
-                  hintText: 'Enter your current password',
+                  labelText:
+                      AppLocalizations.of(context)?.current_password ??
+                      'Current Password',
+                  hintText:
+                      AppLocalizations.of(
+                        context,
+                      )?.enter_your_current_password ??
+                      'Enter your current password',
                   suffixIcon: IconButton(
                     icon: Icon(
                       _showOldPassword
@@ -176,7 +198,10 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your current password';
+                    return AppLocalizations.of(
+                          context,
+                        )?.please_enter_your_current_password ??
+                        'Please enter your current password';
                   }
                   return null;
                 },
@@ -186,8 +211,12 @@ class _AccountScreenState extends State<AccountScreen> {
                 controller: _newPasswordController,
                 obscureText: !_showNewPassword,
                 decoration: InputDecoration(
-                  labelText: 'New Password',
-                  hintText: 'Enter your new password',
+                  labelText:
+                      AppLocalizations.of(context)?.new_password ??
+                      'New Password',
+                  hintText:
+                      AppLocalizations.of(context)?.enter_a_new_password ??
+                      'Enter a new password',
                   suffixIcon: IconButton(
                     icon: Icon(
                       _showNewPassword
@@ -203,10 +232,14 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a new password';
+                    return AppLocalizations.of(
+                          context,
+                        )?.please_enter_a_new_password ??
+                        'Please enter a new password';
                   }
                   if (value.length < 6) {
-                    return 'Password must be at least 6 characters';
+                    return AppLocalizations.of(context)?.password_min_length ??
+                        'Password must be at least 6 characters';
                   }
                   return null;
                 },
@@ -216,8 +249,12 @@ class _AccountScreenState extends State<AccountScreen> {
                 controller: _confirmPasswordController,
                 obscureText: !_showConfirmPassword,
                 decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  hintText: 'Confirm your new password',
+                  labelText:
+                      AppLocalizations.of(context)?.confirm_password ??
+                      'Confirm Password',
+                  hintText:
+                      AppLocalizations.of(context)?.confirm_your_new_password ??
+                      'Confirm your new password',
                   suffixIcon: IconButton(
                     icon: Icon(
                       _showConfirmPassword
@@ -233,10 +270,14 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please confirm your new password';
+                    return AppLocalizations.of(
+                          context,
+                        )?.please_confirm_your_new_password ??
+                        'Please confirm your new password';
                   }
                   if (value != _newPasswordController.text) {
-                    return 'Passwords do not match';
+                    return AppLocalizations.of(context)?.passwords_dont_match ??
+                        'Passwords do not match';
                   }
                   return null;
                 },
@@ -247,7 +288,7 @@ class _AccountScreenState extends State<AccountScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancel'),
           ),
           ElevatedButton(
             onPressed: _isLoading
@@ -266,7 +307,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('Update'),
+                : Text(AppLocalizations.of(context)?.update ?? 'Update'),
           ),
         ],
       ),
@@ -332,13 +373,18 @@ class _AccountScreenState extends State<AccountScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title: AppLocalizations.of(context)?.account_page_title ?? 'الحساب',
+      ),
       body: Consumer<AuthProvider>(
         builder: (context, authProvider, child) {
           final user = authProvider.user;
           if (user == null) {
-            return const Center(
-              child: Text('Please sign in to view your account'),
+            return Center(
+              child: Text(
+                AppLocalizations.of(context)?.please_sign_in_to_view_account ??
+                    'Please sign in to view your account',
+              ),
             );
           }
 
@@ -348,7 +394,8 @@ class _AccountScreenState extends State<AccountScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Account Information',
+                  AppLocalizations.of(context)?.account_information ??
+                      'Account Information',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -373,7 +420,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     children: [
                       _buildInfoRow(
                         context,
-                        'Name',
+                        AppLocalizations.of(context)?.name ?? 'Name',
                         user.name,
                         Icons.person_outline,
                         isDark,
@@ -382,7 +429,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       const SizedBox(height: 16),
                       _buildInfoRow(
                         context,
-                        'Email',
+                        AppLocalizations.of(context)?.email ?? 'Email',
                         user.email,
                         Icons.email_outlined,
                         isDark,
@@ -392,7 +439,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         const SizedBox(height: 16),
                         _buildInfoRow(
                           context,
-                          'Phone',
+                          AppLocalizations.of(context)?.phone ?? 'Phone',
                           user.phone!,
                           Icons.phone_outlined,
                           isDark,
@@ -402,7 +449,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       const SizedBox(height: 16),
                       _buildInfoRow(
                         context,
-                        'Password',
+                        AppLocalizations.of(context)?.password ?? 'Password',
                         '••••••••',
                         Icons.lock_outline,
                         isDark,
@@ -426,7 +473,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Delete Account',
+                        AppLocalizations.of(context)?.delete_account ??
+                            'Delete Account',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -435,7 +483,8 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Once you delete your account, there is no going back. Please be certain.',
+                        AppLocalizations.of(context)?.once_you_delete_account ??
+                            'Once you delete your account, there is no going back. Please be certain.',
                         style: TextStyle(
                           color: isDark
                               ? AppColors.white.withAlpha((255 * 0.7).toInt())
@@ -450,21 +499,33 @@ class _AccountScreenState extends State<AccountScreen> {
                             final shouldDelete = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: const Text('Delete Account'),
-                                content: const Text(
-                                  'Are you sure you want to delete your account? This action cannot be undone.',
+                                title: Text(
+                                  AppLocalizations.of(
+                                        context,
+                                      )?.delete_account ??
+                                      'Delete Account',
+                                ),
+                                content: Text(
+                                  AppLocalizations.of(
+                                        context,
+                                      )?.are_you_sure_delete_account ??
+                                      'Are you sure you want to delete your account? This action cannot be undone.',
                                 ),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
                                         Navigator.pop(context, false),
-                                    child: const Text('Cancel'),
+                                    child: Text(
+                                      AppLocalizations.of(context)?.cancel ??
+                                          'Cancel',
+                                    ),
                                   ),
                                   TextButton(
                                     onPressed: () =>
                                         Navigator.pop(context, true),
-                                    child: const Text(
-                                      'Delete',
+                                    child: Text(
+                                      AppLocalizations.of(context)?.delete ??
+                                          'Delete',
                                       style: TextStyle(color: Colors.red),
                                     ),
                                   ),
@@ -492,7 +553,10 @@ class _AccountScreenState extends State<AccountScreen> {
                               side: BorderSide(color: Colors.red),
                             ),
                           ),
-                          child: const Text('Delete Account'),
+                          child: Text(
+                            AppLocalizations.of(context)?.delete_account ??
+                                'Delete Account',
+                          ),
                         ),
                       ),
                     ],

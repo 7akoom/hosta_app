@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
+import 'package:hosta_app/widgets/language_badges.dart';
 import 'package:hosta_app/data/models/service_model.dart';
 import 'package:hosta_app/data/models/provider_model.dart';
+import 'package:hosta_app/data/static_provider_data.dart';
 import 'package:hosta_app/shared/widgets/index.dart';
 
 class ServiceDetailsScreen extends StatefulWidget {
@@ -35,57 +38,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
 
     setState(() {
       _isLoading = false;
-      _providers = [
-        ProviderModel(
-          id: '1',
-          name: 'John Smith',
-          email: 'john@example.com',
-          phone: '+1234567890',
-          address: '123 Main St, City',
-          image: 'assets/images/logo.png',
-          rating: 4.8,
-          price: 50.0,
-          serviceId: widget.service.id,
-          isActive: true,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          description:
-              'Professional service provider with 5 years of experience',
-          specializations: ['Cleaning', 'Organizing'],
-        ),
-        ProviderModel(
-          id: '2',
-          name: 'Sarah Johnson',
-          email: 'sarah@example.com',
-          phone: '+1234567891',
-          address: '456 Oak St, Town',
-          image: 'assets/images/logo.png',
-          rating: 4.5,
-          price: 45.0,
-          serviceId: widget.service.id,
-          isActive: true,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          description: 'Experienced provider specializing in home services',
-          specializations: ['Deep Cleaning', 'Window Cleaning'],
-        ),
-        ProviderModel(
-          id: '3',
-          name: 'Mike Wilson',
-          email: 'mike@example.com',
-          phone: '+1234567892',
-          address: '789 Pine St, Village',
-          image: 'assets/images/logo.png',
-          rating: 4.9,
-          price: 55.0,
-          serviceId: widget.service.id,
-          isActive: true,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          description: 'Quality service guaranteed',
-          specializations: ['Maintenance', 'Repair'],
-        ),
-      ];
+      _providers = StaticProviderData.getProvidersForService(widget.service.id);
     });
   }
 
@@ -108,11 +61,14 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Providers sorted by ${sortBy == 'distance'
-              ? 'nearest distance'
+          sortBy == 'distance'
+              ? AppLocalizations.of(context)?.providers_sorted_by_distance ??
+                    'Providers sorted by nearest distance'
               : sortBy == 'price'
-              ? 'lowest price'
-              : 'highest rating'}',
+              ? AppLocalizations.of(context)?.providers_sorted_by_price ??
+                    'Providers sorted by lowest price'
+              : AppLocalizations.of(context)?.providers_sorted_by_rating ??
+                    'Providers sorted by highest rating',
         ),
         duration: const Duration(seconds: 2),
       ),
@@ -122,17 +78,27 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.service_details_page_title ??
+            'تفاصيل الخدمة',
+      ),
       body: _isLoading
-          ? const LoadingWidget(message: 'Loading providers...')
+          ? LoadingWidget(
+              message:
+                  AppLocalizations.of(context)?.loading_providers ??
+                  'Loading providers...',
+            )
           : _error != null
           ? CustomErrorWidget(
               message: _error!,
               onRetry: () => _loadMockProviders(),
             )
           : _providers.isEmpty
-          ? const EmptyWidget(
-              message: 'No providers available for this service',
+          ? EmptyWidget(
+              message:
+                  AppLocalizations.of(context)?.no_providers_available ??
+                  'No providers available for this service',
               icon: Icons.person_outline,
             )
           : _buildContent(_providers),
@@ -197,7 +163,8 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Available Providers',
+                AppLocalizations.of(context)?.available_providers ??
+                    'Available Providers',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -212,13 +179,15 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                   color: AppColors.primaryBlue,
                   size: 24,
                 ),
-                tooltip: 'Filter & Sort',
+                tooltip:
+                    AppLocalizations.of(context)?.filter_and_sort ??
+                    'Filter & Sort',
               ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
-            '${providers.length} providers available',
+            '${providers.length} ${AppLocalizations.of(context)?.providers_available ?? 'providers available'}',
             style: TextStyle(
               fontSize: 14,
               color: isDark
@@ -391,7 +360,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                         ),
                       ),
                       Text(
-                        ' / service',
+                        ' / ${AppLocalizations.of(context)?.service ?? 'service'}',
                         style: TextStyle(
                           fontSize: 12,
                           color: isDark
@@ -401,6 +370,19 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 6),
+
+                  // Languages
+                  if (provider.languages != null &&
+                      provider.languages!.isNotEmpty) ...[
+                    LanguageBadges(
+                      languages: provider.languages,
+                      isDark: isDark,
+                      fontSize: 10,
+                      padding: 3,
+                      borderRadius: 6,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -417,7 +399,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         return AlertDialog(
           backgroundColor: isDark ? AppColors.dark : Colors.white,
           title: Text(
-            'Sort Providers',
+            AppLocalizations.of(context)?.sort_providers ?? 'Sort Providers',
             style: TextStyle(
               color: isDark ? AppColors.white : AppColors.dark,
               fontWeight: FontWeight.bold,
@@ -428,7 +410,8 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             children: [
               _buildSortOption(
                 context,
-                'Nearest Distance',
+                AppLocalizations.of(context)?.nearest_distance ??
+                    'Nearest Distance',
                 Icons.location_on,
                 () => _sortProviders('distance'),
                 isDark,
@@ -436,7 +419,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
               const SizedBox(height: 12),
               _buildSortOption(
                 context,
-                'Lowest Price',
+                AppLocalizations.of(context)?.lowest_price ?? 'Lowest Price',
                 Icons.attach_money,
                 () => _sortProviders('price'),
                 isDark,
@@ -444,7 +427,8 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
               const SizedBox(height: 12),
               _buildSortOption(
                 context,
-                'Highest Rating',
+                AppLocalizations.of(context)?.highest_rating ??
+                    'Highest Rating',
                 Icons.star,
                 () => _sortProviders('rating'),
                 isDark,
@@ -455,7 +439,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                'Cancel',
+                AppLocalizations.of(context)?.cancel ?? 'Cancel',
                 style: TextStyle(color: AppColors.primaryBlue),
               ),
             ),

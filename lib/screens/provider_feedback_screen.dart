@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/presentation/providers/feedback_provider.dart';
@@ -29,18 +30,19 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
   final TextEditingController _feedbackController = TextEditingController();
   bool _isSubmitting = false;
 
-  String get _ratingText {
+  String _getRatingText(BuildContext context) {
     switch (_rating) {
       case 1:
-        return '1 - Poor';
+        return AppLocalizations.of(context)?.rating_poor ?? '1 - Poor';
       case 2:
-        return '2 - Fair';
+        return AppLocalizations.of(context)?.rating_fair ?? '2 - Fair';
       case 3:
-        return '3 - Average';
+        return AppLocalizations.of(context)?.rating_average ?? '3 - Average';
       case 4:
-        return '4 - Good';
+        return AppLocalizations.of(context)?.rating_good ?? '4 - Good';
       case 5:
-        return '5 - Excellent';
+        return AppLocalizations.of(context)?.rating_excellent ??
+            '5 - Excellent';
       default:
         return '';
     }
@@ -49,8 +51,11 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
   Future<void> _handleSubmit() async {
     if (_rating == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select a rating'),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)?.please_select_a_rating ??
+                'Please select a rating',
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -102,14 +107,15 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
                 child: const Icon(Icons.check, color: Colors.white, size: 36),
               ),
               const SizedBox(height: 24),
-              const Text(
-                'Thank You!',
+              Text(
+                AppLocalizations.of(context)?.thank_you ?? 'Thank You!',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Your feedback helps us improve our services.',
+              Text(
+                AppLocalizations.of(context)?.your_feedback_helps_us_improve ??
+                    'Your feedback helps us improve our services.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
@@ -130,8 +136,8 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Done',
+                  child: Text(
+                    AppLocalizations.of(context)?.done ?? 'Done',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -172,7 +178,11 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.provider_feedback_page_title ??
+            'تقييم المزود',
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -238,7 +248,8 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'How would you rate the experience\nand service?',
+              AppLocalizations.of(context)?.how_would_you_rate_experience ??
+                  'How would you rate the experience\nand service?',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
@@ -268,7 +279,7 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
             if (_rating > 0) ...[
               const SizedBox(height: 8),
               Text(
-                _ratingText,
+                _getRatingText(context),
                 style: TextStyle(
                   fontSize: 16,
                   color: isDark ? AppColors.white : AppColors.dark,
@@ -294,7 +305,10 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Additional Comments (Optional)',
+                    AppLocalizations.of(
+                          context,
+                        )?.additional_comments_optional ??
+                        'Additional Comments (Optional)',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -306,7 +320,9 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
                     controller: _feedbackController,
                     maxLines: 4,
                     decoration: InputDecoration(
-                      hintText: 'Share your experience...',
+                      hintText:
+                          AppLocalizations.of(context)?.share_your_experience ??
+                          'Share your experience...',
                       hintStyle: TextStyle(
                         color: isDark
                             ? AppColors.white.withAlpha((255 * 0.5).toInt())
@@ -336,7 +352,8 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
               child: Column(
                 children: [
                   Text(
-                    'Your feedback helps us improve our services and maintain high quality standards.',
+                    AppLocalizations.of(context)?.your_feedback_helps_improve ??
+                        'Your feedback helps us improve our services and maintain high quality standards.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
@@ -347,7 +364,10 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Thank you for choosing Hosta Services!',
+                    AppLocalizations.of(
+                          context,
+                        )?.thank_you_for_choosing_hosta ??
+                        'Thank you for choosing Hosta Services!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
@@ -382,8 +402,8 @@ class _ProviderFeedbackScreenState extends State<ProviderFeedbackScreen> {
                           ),
                         ),
                       )
-                    : const Text(
-                        'Submit',
+                    : Text(
+                        AppLocalizations.of(context)?.submit ?? 'Submit',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

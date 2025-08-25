@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 import 'package:hosta_app/widgets/app_logo.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/theme/app_input_decoration.dart';
@@ -28,7 +29,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   void _onConfirm() {
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password changed successfully!")),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)?.password_changed_successfully ??
+                "Password changed successfully!",
+          ),
+        ),
       );
       Future.delayed(const Duration(seconds: 1), () {
         if (!mounted) return;
@@ -53,9 +59,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 const SizedBox(height: 32),
                 Center(child: AppLogo(width: 50, height: 50)),
                 const SizedBox(height: 80),
-                const Text(
-                  "Enter new password",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Text(
+                  AppLocalizations.of(context)?.enter_new_password ??
+                      "Enter new password",
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 32),
 
@@ -65,7 +75,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   obscureText: !_showPassword,
                   decoration: appInputDecoration(
                     context,
-                    "New password",
+                    AppLocalizations.of(context)?.new_password ??
+                        "New password",
                     suffixIcon: IconButton(
                       icon: Icon(
                         _showPassword ? Icons.visibility_off : Icons.visibility,
@@ -79,12 +90,21 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                   validator: (val) {
                     if (val == null || val.isEmpty) {
-                      return "Enter password please";
+                      return AppLocalizations.of(
+                            context,
+                          )?.enter_password_please ??
+                          "Enter password please";
                     } else if (val != _passwordController.text) {
-                      return 'Passwords do not match';
+                      return AppLocalizations.of(
+                            context,
+                          )?.passwords_dont_match ??
+                          'Passwords do not match';
                     }
                     if (val.length < 6) {
-                      return "Password must be at least 6 characters";
+                      return AppLocalizations.of(
+                            context,
+                          )?.password_min_length ??
+                          "Password must be at least 6 characters";
                     }
                     return null;
                   },
@@ -98,7 +118,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   obscureText: !_showConfirmPassword,
                   decoration: appInputDecoration(
                     context,
-                    "Password confirmation",
+                    AppLocalizations.of(context)?.password_confirmation ??
+                        "Password confirmation",
                     suffixIcon: IconButton(
                       icon: Icon(
                         _showConfirmPassword
@@ -114,7 +135,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                   validator: (val) {
                     if (val != _passwordController.text) {
-                      return "The passwords do not match";
+                      return AppLocalizations.of(
+                            context,
+                          )?.passwords_dont_match ??
+                          "The passwords do not match";
                     }
                     return null;
                   },
@@ -139,7 +163,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     onPressed: _onConfirm,
-                    child: const Text("Confirm"),
+                    child: Text(
+                      AppLocalizations.of(context)?.confirm ?? "Confirm",
+                    ),
                   ),
                 ),
               ],

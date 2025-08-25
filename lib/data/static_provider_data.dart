@@ -49,6 +49,7 @@ class StaticProviderData {
         updatedAt: now,
         description: 'Professional cleaning services with 5 years experience',
         specializations: ['House Cleaning', 'Office Cleaning', 'Deep Cleaning'],
+        languages: ['English', 'Arabic', 'Kurdish'],
       ),
       ProviderModel(
         id: 'p2',
@@ -65,6 +66,7 @@ class StaticProviderData {
         updatedAt: now,
         description: 'Eco-friendly cleaning solutions',
         specializations: ['Eco Cleaning', 'Window Cleaning'],
+        languages: ['English', 'Arabic'],
       ),
       // Add 18 more cleaning providers...
       for (int i = 3; i <= 20; i++)
@@ -83,6 +85,11 @@ class StaticProviderData {
           updatedAt: now,
           description: 'Professional cleaning service provider $i',
           specializations: ['Cleaning Service $i'],
+          languages: i % 3 == 0
+              ? ['English', 'Arabic', 'Kurdish']
+              : i % 2 == 0
+              ? ['English', 'Arabic']
+              : ['English', 'Kurdish'],
         ),
     ];
   }
@@ -107,6 +114,7 @@ class StaticProviderData {
         updatedAt: now,
         description: '24/7 emergency plumbing services',
         specializations: ['Emergency Repair', 'Pipe Installation'],
+        languages: ['English', 'Arabic', 'Kurdish'],
       ),
       ProviderModel(
         id: 'p22',
@@ -123,6 +131,7 @@ class StaticProviderData {
         updatedAt: now,
         description: 'Certified plumbing experts',
         specializations: ['Water Heater Repair', 'Drain Cleaning'],
+        languages: ['English', 'Arabic'],
       ),
       // Add 18 more plumbing providers...
       for (int i = 23; i <= 40; i++)
@@ -141,6 +150,11 @@ class StaticProviderData {
           updatedAt: now,
           description: 'Professional plumbing service provider $i',
           specializations: ['Plumbing Service $i'],
+          languages: i % 3 == 0
+              ? ['English', 'Arabic', 'Kurdish']
+              : i % 2 == 0
+              ? ['English', 'Arabic']
+              : ['English', 'Kurdish'],
         ),
     ];
   }
@@ -166,6 +180,11 @@ class StaticProviderData {
           updatedAt: now,
           description: 'Professional electrical service provider $i',
           specializations: ['Electrical Service $i'],
+          languages: i % 3 == 0
+              ? ['English', 'Arabic', 'Kurdish']
+              : i % 2 == 0
+              ? ['English', 'Arabic']
+              : ['English', 'Kurdish'],
         ),
     ];
   }
@@ -191,6 +210,11 @@ class StaticProviderData {
           updatedAt: now,
           description: 'Professional painting service provider $i',
           specializations: ['Painting Service $i'],
+          languages: i % 3 == 0
+              ? ['English', 'Arabic', 'Kurdish']
+              : i % 2 == 0
+              ? ['English', 'Arabic']
+              : ['English', 'Kurdish'],
         ),
     ];
   }
@@ -216,6 +240,11 @@ class StaticProviderData {
           updatedAt: now,
           description: 'Professional gardening service provider $i',
           specializations: ['Gardening Service $i'],
+          languages: i % 3 == 0
+              ? ['English', 'Arabic', 'Kurdish']
+              : i % 2 == 0
+              ? ['English', 'Arabic']
+              : ['English', 'Kurdish'],
         ),
     ];
   }
@@ -241,6 +270,11 @@ class StaticProviderData {
           updatedAt: now,
           description: 'Professional moving service provider $i',
           specializations: ['Moving Service $i'],
+          languages: i % 3 == 0
+              ? ['English', 'Arabic', 'Kurdish']
+              : i % 2 == 0
+              ? ['English', 'Arabic']
+              : ['English', 'Kurdish'],
         ),
     ];
   }
@@ -266,6 +300,11 @@ class StaticProviderData {
           updatedAt: now,
           description: 'Professional babysitting service provider $i',
           specializations: ['Babysitting Service $i'],
+          languages: i % 3 == 0
+              ? ['English', 'Arabic', 'Kurdish']
+              : i % 2 == 0
+              ? ['English', 'Arabic']
+              : ['English', 'Kurdish'],
         ),
     ];
   }
@@ -291,6 +330,11 @@ class StaticProviderData {
           updatedAt: now,
           description: 'Professional car wash service provider $i',
           specializations: ['Car Wash Service $i'],
+          languages: i % 3 == 0
+              ? ['English', 'Arabic', 'Kurdish']
+              : i % 2 == 0
+              ? ['English', 'Arabic']
+              : ['English', 'Kurdish'],
         ),
     ];
   }
@@ -315,6 +359,7 @@ class StaticProviderData {
         updatedAt: now,
         description: 'Professional service provider',
         specializations: ['General Services'],
+        languages: ['English', 'Arabic', 'Kurdish'],
       ),
     ];
   }

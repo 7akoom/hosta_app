@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
+import 'package:hosta_app/widgets/language_badges.dart';
 import 'package:hosta_app/data/models/provider_model.dart';
 import 'package:hosta_app/data/models/service_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hosta_app/presentation/providers/auth_provider.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
+import 'package:hosta_app/theme/app_fonts.dart';
 
 class ProviderDetailsScreen extends StatefulWidget {
   final String providerId;
@@ -58,6 +61,7 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
         updatedAt: DateTime.now(),
         description: 'Professional service provider with 5 years of experience',
         specializations: ['Cleaning', 'Organizing'],
+        languages: ['English', 'Arabic'],
       );
 
       _otherProviders = [
@@ -76,6 +80,7 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
           updatedAt: DateTime.now(),
           description: 'Experienced provider specializing in home services',
           specializations: ['Deep Cleaning', 'Window Cleaning'],
+          languages: ['English', 'French'],
         ),
         ProviderModel(
           id: '3',
@@ -92,6 +97,7 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
           updatedAt: DateTime.now(),
           description: 'Quality service guaranteed',
           specializations: ['Maintenance', 'Repair'],
+          languages: ['English', 'Spanish'],
         ),
       ];
     });
@@ -100,7 +106,11 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.provider_details_page_title ??
+            'تفاصيل المزود',
+      ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
@@ -109,13 +119,14 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Error loading provider data',
+                    AppLocalizations.of(context)?.error_loading_provider_data ??
+                        'Error loading provider data',
                     style: TextStyle(color: Colors.red),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _loadMockData,
-                    child: const Text('Retry'),
+                    child: Text(AppLocalizations.of(context)?.retry ?? 'Retry'),
                   ),
                 ],
               ),
@@ -199,6 +210,9 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: isDark ? AppColors.white : AppColors.dark,
+                    fontFamily: AppFonts.getFontFamily(
+                      Localizations.localeOf(context),
+                    ),
                   ),
                 ),
               ),
@@ -224,21 +238,33 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text('Sign in Required'),
-                          content: const Text(
-                            'Please sign in to chat with service providers.',
+                          title: Text(
+                            AppLocalizations.of(context)?.sign_in_required ??
+                                'Sign in Required',
+                          ),
+                          content: Text(
+                            AppLocalizations.of(
+                                  context,
+                                )?.please_sign_in_to_chat ??
+                                'Please sign in to chat with service providers.',
                           ),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancel'),
+                              child: Text(
+                                AppLocalizations.of(context)?.cancel ??
+                                    'Cancel',
+                              ),
                             ),
                             ElevatedButton(
                               onPressed: () {
                                 Navigator.pop(context); // Close dialog
                                 Navigator.pushNamed(context, '/signin');
                               },
-                              child: const Text('Sign in'),
+                              child: Text(
+                                AppLocalizations.of(context)?.sign_in ??
+                                    'Sign in',
+                              ),
                             ),
                           ],
                         ),
@@ -283,16 +309,22 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: isDark ? AppColors.white : AppColors.dark,
+                      fontFamily: AppFonts.getFontFamily(
+                        Localizations.localeOf(context),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '(25 reviews)',
+                    '${AppLocalizations.of(context)?.reviews ?? 'Reviews'} (25)',
                     style: TextStyle(
                       fontSize: 14,
                       color: isDark
                           ? AppColors.white.withAlpha((255 * 0.7).toInt())
                           : AppColors.dark.withAlpha((255 * 0.7).toInt()),
+                      fontFamily: AppFonts.getFontFamily(
+                        Localizations.localeOf(context),
+                      ),
                     ),
                   ),
                 ],
@@ -315,12 +347,15 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                     ),
                   ),
                   Text(
-                    ' / service',
+                    ' / ${AppLocalizations.of(context)?.service ?? 'service'}',
                     style: TextStyle(
                       fontSize: 14,
                       color: isDark
                           ? AppColors.white.withAlpha((255 * 0.7).toInt())
                           : AppColors.dark.withAlpha((255 * 0.7).toInt()),
+                      fontFamily: AppFonts.getFontFamily(
+                        Localizations.localeOf(context),
+                      ),
                     ),
                   ),
                 ],
@@ -328,23 +363,84 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Icon(Icons.location_on, size: 16, color: AppColors.primaryBlue),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  _provider!.address,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: isDark
-                        ? AppColors.white.withAlpha((255 * 0.7).toInt())
-                        : AppColors.dark.withAlpha((255 * 0.7).toInt()),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Icon(
+                    Icons.location_on,
+                    size: 16,
+                    color: AppColors.primaryBlue,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    _provider!.address,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDark
+                          ? AppColors.white.withAlpha((255 * 0.7).toInt())
+                          : AppColors.dark.withAlpha((255 * 0.7).toInt()),
+                      fontFamily: AppFonts.getFontFamily(
+                        Localizations.localeOf(context),
+                      ),
+                    ),
+                    softWrap: true,
+                  ),
+                ),
+              ],
+            ),
           ),
+          const SizedBox(height: 12),
+          // Languages Section
+          if (_provider!.languages != null &&
+              _provider!.languages!.isNotEmpty) ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Icon(
+                    Icons.language,
+                    size: 16,
+                    color: AppColors.primaryBlue,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Languages',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? AppColors.white : AppColors.dark,
+                          fontFamily: AppFonts.getFontFamily(
+                            Localizations.localeOf(context),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      LanguageBadges(
+                        languages: _provider!.languages,
+                        isDark: isDark,
+                        fontSize: 12,
+                        padding: 6,
+                        borderRadius: 10,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
         ],
       ),
     );
@@ -362,7 +458,7 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Reviews',
+                AppLocalizations.of(context)?.reviews ?? 'Reviews',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -378,7 +474,7 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                   );
                 },
                 child: Text(
-                  'View All',
+                  AppLocalizations.of(context)?.view_all ?? 'View All',
                   style: TextStyle(
                     fontSize: 14,
                     color: AppColors.primaryBlue,
@@ -391,14 +487,16 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
           const SizedBox(height: 16),
           _buildReviewItem(
             'Ahmed Ali',
-            'Great service! Very professional and on time.',
+            AppLocalizations.of(context)?.great_service ??
+                'Great service! Very professional and on time.',
             5,
             'assets/images/logo.png',
           ),
           const SizedBox(height: 12),
           _buildReviewItem(
             'Sarah Johnson',
-            'Excellent work quality. Highly recommended!',
+            AppLocalizations.of(context)?.excellent_work_quality ??
+                'Excellent work quality. Highly recommended!',
             4,
             'assets/images/logo.png',
           ),
@@ -440,15 +538,16 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
               children: [
                 Row(
                   children: [
-                    Text(
-                      name,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isDark ? AppColors.white : AppColors.dark,
+                    Expanded(
+                      child: Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? AppColors.white : AppColors.dark,
+                        ),
                       ),
                     ),
-                    const Spacer(),
                     Row(
                       children: List.generate(5, (index) {
                         return Icon(
@@ -494,8 +593,8 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        child: const Text(
-          'Book Now',
+        child: Text(
+          AppLocalizations.of(context)?.book_now ?? 'Book Now',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
@@ -518,7 +617,7 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'Other Providers',
+            AppLocalizations.of(context)?.other_providers ?? 'Other Providers',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -536,7 +635,7 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
             itemBuilder: (context, index) {
               final provider = otherProviders[index];
               return Container(
-                width: (MediaQuery.of(context).size.width - 32) / 3,
+                width: (MediaQuery.of(context).size.width - 32) / 2.5,
                 margin: const EdgeInsets.only(right: 12),
                 child: Column(
                   children: [
@@ -558,7 +657,7 @@ class _ProviderDetailsScreenState extends State<ProviderDetailsScreen> {
                     ),
                     const SizedBox(height: 8),
                     SizedBox(
-                      width: 80,
+                      width: double.infinity,
                       child: Text(
                         provider.name,
                         style: TextStyle(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hosta_app/theme/app_colors.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -23,13 +24,19 @@ class CustomBottomNavigation extends StatelessWidget {
       unselectedItemColor: isDark
           ? AppColors.white.withAlpha((255 * 0.7).toInt())
           : AppColors.dark.withAlpha((255 * 0.7).toInt()),
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.miscellaneous_services),
-          label: 'My services',
+          icon: const Icon(Icons.home),
+          label: AppLocalizations.of(context)?.home ?? 'Home',
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.miscellaneous_services),
+          label: AppLocalizations.of(context)?.my_services ?? 'My Services',
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.person),
+          label: AppLocalizations.of(context)?.profile ?? 'Profile',
+        ),
       ],
     );
   }

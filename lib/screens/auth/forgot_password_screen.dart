@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 import 'package:hosta_app/widgets/app_logo.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/theme/app_input_decoration.dart';
@@ -46,9 +47,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               const SizedBox(height: 32),
               Center(child: AppLogo(width: 50, height: 50)),
               const SizedBox(height: 80),
-              const Text(
-                "Choose email or phone number to reset your password",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Text(
+                AppLocalizations.of(
+                      context,
+                    )?.choose_email_or_phone_to_reset_password ??
+                    "Choose email or phone number to reset your password",
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 24),
               Row(
@@ -73,7 +80,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           _controller.clear();
                         });
                       },
-                      child: const Text("Email"),
+                      child: Text(
+                        AppLocalizations.of(context)?.email ?? "Email",
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -96,7 +105,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           _controller.clear();
                         });
                       },
-                      child: const Text("Phone"),
+                      child: Text(
+                        AppLocalizations.of(context)?.phone ?? "Phone",
+                      ),
                     ),
                   ),
                 ],
@@ -107,8 +118,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 decoration: appInputDecoration(
                   context,
                   isEmailSelected
-                      ? "Enter your email"
-                      : "Enter your phone number",
+                      ? AppLocalizations.of(context)?.enter_your_email ??
+                            "Enter your email"
+                      : AppLocalizations.of(context)?.enter_your_phone ??
+                            "Enter your phone number",
                 ),
                 keyboardType: isEmailSelected
                     ? TextInputType.emailAddress
@@ -138,7 +151,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                     );
                   },
-                  child: const Text("Reset password"),
+                  child: Text(
+                    AppLocalizations.of(context)?.reset_password ??
+                        "Reset password",
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
@@ -149,7 +165,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     Navigator.pushNamed(context, '/signin');
                   },
                   child: Text(
-                    "Back to signin",
+                    AppLocalizations.of(context)?.back_to_signin ??
+                        "Back to signin",
                     style: TextStyle(
                       color: backLinkColor,
                       decoration: TextDecoration.underline,

@@ -6,6 +6,7 @@ import 'package:hosta_app/widgets/custom_bottom_navigation.dart';
 import 'package:hosta_app/data/models/chat_model.dart';
 import 'package:hosta_app/presentation/providers/chat_provider.dart';
 import 'package:hosta_app/shared/widgets/index.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class ChatsListScreen extends StatefulWidget {
   const ChatsListScreen({super.key});
@@ -29,7 +30,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title: AppLocalizations.of(context)?.chats_page_title ?? 'المحادثات',
+      ),
       body: Consumer<ChatProvider>(
         builder: (context, chatProvider, child) {
           if (chatProvider.isLoading) {

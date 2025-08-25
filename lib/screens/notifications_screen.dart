@@ -5,6 +5,7 @@ import 'package:hosta_app/routes/app_routes.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/presentation/providers/notification_provider.dart';
 import 'package:hosta_app/data/models/notification_model.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -247,31 +248,49 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.notifications_page_title ??
+            'الإشعارات',
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 12.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Notifications',
+                  AppLocalizations.of(context)?.notifications ??
+                      'Notifications',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: isDark ? AppColors.white : AppColors.dark,
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 8),
                 TextButton.icon(
                   onPressed: () {
                     if (!mounted) return;
                     final provider = context.read<NotificationProvider>();
                     provider.markAllAsRead();
                   },
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0,
+                      vertical: 8.0,
+                    ),
+                  ),
                   icon: const Icon(Icons.done_all),
-                  label: const Text('Mark all as read'),
+                  label: Text(
+                    AppLocalizations.of(context)?.mark_all_as_read ??
+                        'Mark all as read',
+                  ),
                 ),
               ],
             ),
@@ -294,7 +313,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             provider.resetError();
                             _refreshNotifications();
                           },
-                          child: const Text('Try Again'),
+                          child: Text(
+                            AppLocalizations.of(context)?.try_again ??
+                                'Try Again',
+                          ),
                         ),
                       ],
                     ),
@@ -304,7 +326,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 if (provider.notifications.isEmpty) {
                   return Center(
                     child: Text(
-                      'No notifications yet',
+                      AppLocalizations.of(context)?.no_notifications_yet ??
+                          'No notifications yet',
                       style: TextStyle(
                         color: isDark ? AppColors.white : AppColors.dark,
                       ),

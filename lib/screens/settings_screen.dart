@@ -3,16 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/presentation/providers/app_settings_provider.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.watch<AppSettingsProvider>().isDarkMode;
-
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title: AppLocalizations.of(context)?.settings_page_title ?? 'الإعدادات',
+      ),
       body: Consumer<AppSettingsProvider>(
         builder: (context, appProvider, child) {
           return SingleChildScrollView(
@@ -21,23 +22,25 @@ class SettingsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Settings',
+                  AppLocalizations.of(context)?.settings ?? 'Settings',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? AppColors.white : AppColors.dark,
+                    color: appProvider.isDarkMode
+                        ? AppColors.white
+                        : AppColors.dark,
                   ),
                 ),
                 const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isDark
+                    color: appProvider.isDarkMode
                         ? AppColors.dark.withAlpha((255 * 0.1).toInt())
                         : Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isDark
+                      color: appProvider.isDarkMode
                           ? AppColors.white.withAlpha((255 * 0.2).toInt())
                           : AppColors.boxBorder,
                     ),
@@ -46,11 +49,14 @@ class SettingsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Appearance',
+                        AppLocalizations.of(context)?.appearance ??
+                            'Appearance',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: isDark ? AppColors.white : AppColors.dark,
+                          color: appProvider.isDarkMode
+                              ? AppColors.white
+                              : AppColors.dark,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -65,27 +71,33 @@ class SettingsScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
-                            isDark ? Icons.dark_mode : Icons.light_mode,
+                            appProvider.isDarkMode
+                                ? Icons.dark_mode
+                                : Icons.light_mode,
                             color: AppColors.primaryBlue,
                             size: 20,
                           ),
                         ),
                         title: Text(
-                          'Theme',
+                          AppLocalizations.of(context)?.theme ?? 'Theme',
                           style: TextStyle(
-                            color: isDark ? AppColors.white : AppColors.dark,
+                            color: appProvider.isDarkMode
+                                ? AppColors.white
+                                : AppColors.dark,
                           ),
                         ),
                         subtitle: Text(
-                          isDark ? 'Dark' : 'Light',
+                          appProvider.isDarkMode
+                              ? AppLocalizations.of(context)?.dark ?? 'Dark'
+                              : AppLocalizations.of(context)?.light ?? 'Light',
                           style: TextStyle(
-                            color: isDark
+                            color: appProvider.isDarkMode
                                 ? AppColors.white.withAlpha((255 * 0.7).toInt())
                                 : AppColors.dark.withAlpha((255 * 0.7).toInt()),
                           ),
                         ),
                         trailing: Switch(
-                          value: isDark,
+                          value: appProvider.isDarkMode,
                           onChanged: (value) {
                             appProvider.toggleTheme();
                           },
@@ -98,12 +110,12 @@ class SettingsScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isDark
+                    color: appProvider.isDarkMode
                         ? AppColors.dark.withAlpha((255 * 0.1).toInt())
                         : Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isDark
+                      color: appProvider.isDarkMode
                           ? AppColors.white.withAlpha((255 * 0.2).toInt())
                           : AppColors.boxBorder,
                     ),
@@ -112,11 +124,13 @@ class SettingsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Language',
+                        AppLocalizations.of(context)?.language ?? 'Language',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: isDark ? AppColors.white : AppColors.dark,
+                          color: appProvider.isDarkMode
+                              ? AppColors.white
+                              : AppColors.dark,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -137,17 +151,25 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         ),
                         title: Text(
-                          'App Language',
+                          AppLocalizations.of(context)?.app_language ??
+                              'App Language',
                           style: TextStyle(
-                            color: isDark ? AppColors.white : AppColors.dark,
+                            color: appProvider.isDarkMode
+                                ? AppColors.white
+                                : AppColors.dark,
                           ),
                         ),
                         subtitle: Text(
                           appProvider.selectedLanguage == 'en'
-                              ? 'English'
-                              : 'العربية',
+                              ? AppLocalizations.of(context)?.english ??
+                                    'English'
+                              : appProvider.selectedLanguage == 'ar'
+                              ? AppLocalizations.of(context)?.arabic ??
+                                    'العربية'
+                              : AppLocalizations.of(context)?.kurdish ??
+                                    'کوردی',
                           style: TextStyle(
-                            color: isDark
+                            color: appProvider.isDarkMode
                                 ? AppColors.white.withAlpha((255 * 0.7).toInt())
                                 : AppColors.dark.withAlpha((255 * 0.7).toInt()),
                           ),
@@ -158,9 +180,10 @@ class SettingsScreen extends StatelessWidget {
                             DropdownMenuItem(
                               value: 'en',
                               child: Text(
-                                'English',
+                                AppLocalizations.of(context)?.english ??
+                                    'English',
                                 style: TextStyle(
-                                  color: isDark
+                                  color: appProvider.isDarkMode
                                       ? AppColors.white
                                       : AppColors.dark,
                                 ),
@@ -169,9 +192,22 @@ class SettingsScreen extends StatelessWidget {
                             DropdownMenuItem(
                               value: 'ar',
                               child: Text(
-                                'العربية',
+                                AppLocalizations.of(context)?.arabic ??
+                                    'العربية',
                                 style: TextStyle(
-                                  color: isDark
+                                  color: appProvider.isDarkMode
+                                      ? AppColors.white
+                                      : AppColors.dark,
+                                ),
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: 'ku',
+                              child: Text(
+                                AppLocalizations.of(context)?.kurdish ??
+                                    'کوردی',
+                                style: TextStyle(
+                                  color: appProvider.isDarkMode
                                       ? AppColors.white
                                       : AppColors.dark,
                                 ),
@@ -183,11 +219,15 @@ class SettingsScreen extends StatelessWidget {
                               appProvider.setLanguage(value);
                             }
                           },
-                          dropdownColor: isDark ? AppColors.dark : Colors.white,
+                          dropdownColor: appProvider.isDarkMode
+                              ? AppColors.dark
+                              : Colors.white,
                           underline: const SizedBox(),
                           icon: Icon(
                             Icons.arrow_drop_down,
-                            color: isDark ? AppColors.white : AppColors.dark,
+                            color: appProvider.isDarkMode
+                                ? AppColors.white
+                                : AppColors.dark,
                           ),
                         ),
                       ),

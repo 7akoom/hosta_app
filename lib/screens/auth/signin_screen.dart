@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hosta_app/widgets/app_logo.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/theme/app_input_decoration.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -36,9 +37,13 @@ class _SigninScreenState extends State<SigninScreen> {
 
     if (!mounted) return;
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Login successful")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.of(context)?.login ?? "Login successful",
+        ),
+      ),
+    );
 
     Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
   }
@@ -62,16 +67,23 @@ class _SigninScreenState extends State<SigninScreen> {
                 const SizedBox(height: 32),
                 const Center(child: AppLogo(width: 50, height: 50)),
                 const SizedBox(height: 80),
-                const Text(
-                  "Sign in with your email or phone number",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Text(
+                  AppLocalizations.of(context)?.sign_in ??
+                      "Sign in with your email or phone number",
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 32),
                 _buildInputField(
                   controller: _identifierController,
-                  hint: "Email or Mobile number",
+                  hint:
+                      AppLocalizations.of(context)?.email ??
+                      "Email or Mobile number",
                   validator: (val) => val == null || val.isEmpty
-                      ? "Please enter email or phone"
+                      ? AppLocalizations.of(context)?.email ??
+                            "Please enter email or phone"
                       : null,
                 ),
                 const SizedBox(height: 16),
@@ -84,7 +96,8 @@ class _SigninScreenState extends State<SigninScreen> {
                       Navigator.pushNamed(context, '/forgot-password');
                     },
                     child: Text(
-                      "Forgot Password?",
+                      AppLocalizations.of(context)?.forgot_password ??
+                          "Forgot Password?",
                       style: TextStyle(
                         color: linkColor,
                         decoration: TextDecoration.underline,
@@ -104,7 +117,9 @@ class _SigninScreenState extends State<SigninScreen> {
                               buttonTextColor,
                             ),
                           )
-                        : const Text("Sign in"),
+                        : Text(
+                            AppLocalizations.of(context)?.sign_in ?? "Sign in",
+                          ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -112,13 +127,16 @@ class _SigninScreenState extends State<SigninScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have an account? "),
+                      Text(
+                        AppLocalizations.of(context)?.dont_have_account ??
+                            "Don't have an account? ",
+                      ),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacementNamed(context, '/signup');
                         },
                         child: Text(
-                          "Signup",
+                          AppLocalizations.of(context)?.sign_up ?? "Signup",
                           style: TextStyle(
                             color: linkColor,
                             fontWeight: FontWeight.bold,
@@ -159,10 +177,11 @@ class _SigninScreenState extends State<SigninScreen> {
   Widget _buildPasswordField() {
     return _buildInputField(
       controller: _passwordController,
-      hint: "Password",
+      hint: AppLocalizations.of(context)?.password ?? "Password",
       obscure: !_isPasswordVisible,
-      validator: (val) =>
-          val == null || val.length < 6 ? "Enter valid password" : null,
+      validator: (val) => val == null || val.length < 6
+          ? AppLocalizations.of(context)?.password ?? "Enter valid password"
+          : null,
       suffixIcon: IconButton(
         icon: Icon(
           _isPasswordVisible ? Icons.visibility_off : Icons.visibility,

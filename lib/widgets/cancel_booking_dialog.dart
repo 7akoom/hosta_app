@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 
 Future<void> showCancelBookingDialog({
@@ -23,14 +24,16 @@ Future<void> showCancelBookingDialog({
             child: const Icon(Icons.check, color: Colors.white, size: 36),
           ),
           const SizedBox(height: 24),
-          const Text(
-            'Booking Cancelled',
+          Text(
+            AppLocalizations.of(context)?.booking_cancelled ??
+                'Booking Cancelled',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Your booking has been cancelled successfully.',
+          Text(
+            AppLocalizations.of(context)?.your_booking_has_been_cancelled ??
+                'Your booking has been cancelled successfully.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
@@ -49,8 +52,8 @@ Future<void> showCancelBookingDialog({
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                'Done',
+              child: Text(
+                AppLocalizations.of(context)?.done ?? 'Done',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

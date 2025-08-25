@@ -6,6 +6,7 @@ import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/presentation/providers/category_provider.dart';
 import 'package:hosta_app/data/models/category_model.dart';
 import 'package:hosta_app/shared/widgets/index.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -59,11 +60,17 @@ class _SearchScreenState extends State<SearchScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title: AppLocalizations.of(context)?.search_page_title ?? 'البحث',
+      ),
       body: Consumer<CategoryProvider>(
         builder: (context, categoryProvider, child) {
           if (categoryProvider.isLoading) {
-            return const LoadingWidget(message: 'Loading categories...');
+            return LoadingWidget(
+              message:
+                  AppLocalizations.of(context)?.loading_categories ??
+                  'Loading categories...',
+            );
           }
           if (categoryProvider.error != null) {
             return CustomErrorWidget(
@@ -89,7 +96,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Search for services...',
+                    hintText:
+                        AppLocalizations.of(context)?.search_for_services ??
+                        'Search for services...',
                     prefixIcon: Icon(
                       Icons.search,
                       color: isDark ? AppColors.white : AppColors.dark,
@@ -150,7 +159,11 @@ class _SearchScreenState extends State<SearchScreen> {
         ? _filteredCategories
         : categoryProvider.categories;
     if (categories.isEmpty) {
-      return const EmptyWidget(message: 'No categories found');
+      return EmptyWidget(
+        message:
+            AppLocalizations.of(context)?.no_categories_found ??
+            'No categories found',
+      );
     }
     return ListView.separated(
       padding: const EdgeInsets.all(16),

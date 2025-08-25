@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 
@@ -59,14 +60,15 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
               child: const Icon(Icons.check, color: Colors.white, size: 36),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Booking Cancelled Successfully',
+            Text(
+              AppLocalizations.of(context)?.booking_cancelled_successfully ??
+                  'Booking Cancelled Successfully',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
-              'Reason: $reason',
+              '${AppLocalizations.of(context)?.reason ?? 'Reason'}: $reason',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
@@ -85,8 +87,8 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Done',
+                child: Text(
+                  AppLocalizations.of(context)?.done ?? 'Done',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -101,14 +103,18 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
     );
   }
 
-  final List<String> _cancellationReasons = [
-    'Provider not available',
-    'Change of plans',
-    'Found another provider',
-    'Price too high',
-    'Emergency',
-    'Other',
-  ];
+  List<String> _getCancellationReasons(BuildContext context) {
+    return [
+      AppLocalizations.of(context)?.provider_not_available ??
+          'Provider not available',
+      AppLocalizations.of(context)?.change_of_plans ?? 'Change of plans',
+      AppLocalizations.of(context)?.found_another_provider ??
+          'Found another provider',
+      AppLocalizations.of(context)?.price_too_high ?? 'Price too high',
+      AppLocalizations.of(context)?.emergency ?? 'Emergency',
+      AppLocalizations.of(context)?.other ?? 'Other',
+    ];
+  }
 
   @override
   void dispose() {
@@ -121,7 +127,11 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.cancel_booking_page_title ??
+            'إلغاء الحجز',
+      ),
       body: SingleChildScrollView(
         // تجنب تداخل لوحة المفاتيح مع المحتوى
         padding: EdgeInsets.only(
@@ -135,7 +145,10 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
               Icon(Icons.cancel_outlined, size: 48, color: Colors.red),
               const SizedBox(height: 16),
               Text(
-                'Please Pick A Reason for Cancellation',
+                AppLocalizations.of(
+                      context,
+                    )?.please_pick_reason_for_cancellation ??
+                    'Please Pick A Reason for Cancellation',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -158,7 +171,8 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                   value: _selectedReason,
                   isExpanded: true,
                   hint: Text(
-                    'Select a reason',
+                    AppLocalizations.of(context)?.select_a_reason ??
+                        'Select a reason',
                     style: TextStyle(
                       color: isDark
                           ? AppColors.white.withAlpha((255 * 0.7).toInt())
@@ -170,7 +184,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                     Icons.keyboard_arrow_down,
                     color: isDark ? AppColors.white : AppColors.dark,
                   ),
-                  items: _cancellationReasons.map((String reason) {
+                  items: _getCancellationReasons(context).map((String reason) {
                     return DropdownMenuItem<String>(
                       value: reason,
                       child: Text(
@@ -206,7 +220,11 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                   textAlignVertical:
                       TextAlignVertical.top, // محاذاة النص للأعلى
                   decoration: InputDecoration(
-                    hintText: 'Please specify your reason',
+                    hintText:
+                        AppLocalizations.of(
+                          context,
+                        )?.please_specify_your_reason ??
+                        'Please specify your reason',
                     hintStyle: TextStyle(
                       color: isDark
                           ? AppColors.white.withAlpha((255 * 0.5).toInt())
@@ -241,7 +259,10 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Cancel', style: TextStyle(fontSize: 16)),
+                  child: Text(
+                    AppLocalizations.of(context)?.cancel ?? 'Cancel',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ],

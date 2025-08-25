@@ -6,6 +6,7 @@ import 'package:hosta_app/data/models/chat_model.dart';
 import 'package:hosta_app/data/models/provider_model.dart';
 import 'package:hosta_app/presentation/providers/chat_provider.dart';
 import 'package:hosta_app/shared/widgets/index.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class ChatScreen extends StatefulWidget {
   final ProviderModel provider;
@@ -93,7 +94,11 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Consumer<ChatProvider>(
               builder: (context, chatProvider, child) {
                 if (chatProvider.isLoading) {
-                  return const LoadingWidget(message: 'Loading chat...');
+                  return LoadingWidget(
+                    message:
+                        AppLocalizations.of(context)?.loading_chat ??
+                        'Loading chat...',
+                  );
                 }
 
                 if (chatProvider.error != null) {
@@ -105,8 +110,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
                 final currentChat = chatProvider.currentChat;
                 if (currentChat == null) {
-                  return const EmptyWidget(
-                    message: 'No chat available',
+                  return EmptyWidget(
+                    message:
+                        AppLocalizations.of(context)?.no_chat_available ??
+                        'No chat available',
                     icon: Icons.chat_bubble_outline,
                   );
                 }
@@ -144,7 +151,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
                 Text(
-                  'Service Provider',
+                  AppLocalizations.of(context)?.service_provider ??
+                      'Service Provider',
                   style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
@@ -160,9 +168,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildMessagesList(List<MessageModel> messages) {
     if (messages.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'ابدأ المحادثة الآن!',
+          AppLocalizations.of(context)?.start_conversation_now ??
+              'ابدأ المحادثة الآن!',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
@@ -266,8 +275,10 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               child: TextField(
                 controller: _messageController,
-                decoration: const InputDecoration(
-                  hintText: 'اكتب رسالتك هنا...',
+                decoration: InputDecoration(
+                  hintText:
+                      AppLocalizations.of(context)?.type_your_message_here ??
+                      'اكتب رسالتك هنا...',
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 16,
@@ -301,13 +312,13 @@ class _ChatScreenState extends State<ChatScreen> {
     final difference = now.difference(time);
 
     if (difference.inDays > 0) {
-      return '${difference.inDays} يوم';
+      return '${difference.inDays} ${AppLocalizations.of(context)?.days ?? 'يوم'}';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours} ساعة';
+      return '${difference.inHours} ${AppLocalizations.of(context)?.hours ?? 'ساعة'}';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} دقيقة';
+      return '${difference.inMinutes} ${AppLocalizations.of(context)?.minutes ?? 'دقيقة'}';
     } else {
-      return 'الآن';
+      return AppLocalizations.of(context)?.now ?? 'الآن';
     }
   }
 }

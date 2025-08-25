@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:hosta_app/widgets/custom_bottom_navigation.dart';
 import 'package:hosta_app/screens/home_screen.dart';
 import 'package:hosta_app/screens/my_services_screen.dart';
 import 'package:hosta_app/screens/profile_screen.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -45,22 +47,34 @@ class _MainScreenState extends State<MainScreen> {
       _lastBackPressTime = now;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('اضغط مرة أخرى للخروج'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)?.press_back_again ??
+                'Press back again to exit',
+          ),
+          duration: const Duration(seconds: 2),
         ),
       );
 
       return false;
     }
+
+    // إذا تم الضغط مرتين خلال ثانيتين، نخرج من التطبيق
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return !_handleBackPress(context);
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          final shouldPop = _handleBackPress(context);
+          if (shouldPop) {
+            // إذا كان يجب الخروج، نخرج من التطبيق
+            SystemNavigator.pop();
+          }
+        }
       },
       child: Scaffold(
         body: _screens[_selectedIndex],

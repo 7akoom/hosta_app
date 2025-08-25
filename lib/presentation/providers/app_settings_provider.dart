@@ -7,6 +7,13 @@ class AppSettingsProvider extends ChangeNotifier {
   late bool _isDarkMode;
   late String _selectedLanguage;
 
+  // Supported languages
+  static const Map<String, String> supportedLanguages = {
+    'en': 'English',
+    'ar': 'العربية',
+    'ku': 'کوردی',
+  };
+
   AppSettingsProvider(this._prefs) {
     _initializeSettings();
     _setupThemeListener();
@@ -20,7 +27,13 @@ class AppSettingsProvider extends ChangeNotifier {
 
     // Initialize with system theme if not set
     _isDarkMode = _prefs.getBool('isDarkMode') ?? systemIsDark;
-    _selectedLanguage = _prefs.getString('selectedLanguage') ?? 'en';
+    _selectedLanguage = _prefs.getString('selected_language') ?? 'en';
+
+    // Validate language
+    if (!supportedLanguages.containsKey(_selectedLanguage)) {
+      _selectedLanguage = 'en';
+      _prefs.setString('selectedLanguage', 'en');
+    }
   }
 
   void _setupThemeListener() {
@@ -37,6 +50,9 @@ class AppSettingsProvider extends ChangeNotifier {
 
   bool get isDarkMode => _isDarkMode;
   String get selectedLanguage => _selectedLanguage;
+  Map<String, String> get languages => supportedLanguages;
+
+  Locale get locale => Locale(_selectedLanguage);
 
   Future<void> toggleTheme() async {
     _isDarkMode = !_isDarkMode;
@@ -45,9 +61,10 @@ class AppSettingsProvider extends ChangeNotifier {
   }
 
   Future<void> setLanguage(String language) async {
-    if (language != _selectedLanguage) {
+    if (language != _selectedLanguage &&
+        supportedLanguages.containsKey(language)) {
       _selectedLanguage = language;
-      await _prefs.setString('selectedLanguage', language);
+      await _prefs.setString('selected_language', language);
       notifyListeners();
     }
   }

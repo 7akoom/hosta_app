@@ -14,6 +14,23 @@ class AuthProvider extends ChangeNotifier {
     _initializeAuthState();
   }
 
+  // إنشاء مستخدم وهمي للعرض
+  UserModel _createMockUser() {
+    return UserModel(
+      id: 'mock_user_001',
+      name: 'أحمد محمد',
+      email: 'ahmed.mohamed@example.com',
+      phone: '+964 750 123 4567',
+      avatar: null,
+      emailVerifiedAt: DateTime.now().subtract(const Duration(days: 30)),
+      createdAt: DateTime.now().subtract(const Duration(days: 90)),
+      updatedAt: DateTime.now().subtract(const Duration(days: 5)),
+      isActive: true,
+      city: 'بغداد',
+      address: 'شارع الرشيد، بغداد، العراق',
+    );
+  }
+
   Future<void> _initializeAuthState() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('access_token');
@@ -29,7 +46,8 @@ class AuthProvider extends ChangeNotifier {
         _user = null;
       }
     } else {
-      _user = null;
+      // إظهار المستخدم الوهمي بدلاً من null
+      _user = _createMockUser();
     }
     notifyListeners();
   }
@@ -101,7 +119,8 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       await _authRepository.signOut();
-      _user = null;
+      // عند تسجيل الخروج، نعيد المستخدم الوهمي
+      _user = _createMockUser();
       _error = null;
     } catch (e) {
       _error = e is NetworkException ? e.message : 'Sign out failed';
@@ -160,6 +179,16 @@ class AuthProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('access_token');
     _user = null;
+    notifyListeners();
+  }
+
+  // دالة للتبديل بين المستخدم الوهمي والمستخدم الحقيقي (للتطوير)
+  void toggleMockUser() {
+    if (_user?.id == 'mock_user_001') {
+      _user = null;
+    } else {
+      _user = _createMockUser();
+    }
     notifyListeners();
   }
 }

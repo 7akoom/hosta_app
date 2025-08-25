@@ -3,6 +3,7 @@ import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
 import 'package:hosta_app/theme/app_colors.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class BookServiceScreen extends StatefulWidget {
   const BookServiceScreen({super.key});
@@ -30,7 +31,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   Icons.camera_alt,
                   color: AppColors.primaryBlue,
                 ),
-                title: const Text('Take a Photo'),
+                title: Text(
+                  AppLocalizations.of(context)?.take_a_photo ?? 'Take a Photo',
+                ),
                 onTap: () async {
                   Navigator.pop(context);
                   final XFile? image = await _picker.pickImage(
@@ -48,7 +51,10 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   Icons.photo_library,
                   color: AppColors.primaryBlue,
                 ),
-                title: const Text('Choose from Gallery'),
+                title: Text(
+                  AppLocalizations.of(context)?.choose_from_gallery ??
+                      'Choose from Gallery',
+                ),
                 onTap: () async {
                   Navigator.pop(context);
                   final XFile? image = await _picker.pickImage(
@@ -73,14 +79,19 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.book_service_page_title ??
+            'حجز الخدمة',
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Describe your issue:',
+            Text(
+              AppLocalizations.of(context)?.describe_your_issue ??
+                  'Describe your issue:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 8),
@@ -88,7 +99,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               controller: _issueController,
               maxLines: 5,
               decoration: InputDecoration(
-                hintText: 'Type your issue here...',
+                hintText:
+                    AppLocalizations.of(context)?.type_your_issue_here ??
+                    'Type your issue here...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(
@@ -112,9 +125,10 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               ),
             ),
             const SizedBox(height: 40),
-            const Center(
+            Center(
               child: Text(
-                'Add Attachment',
+                AppLocalizations.of(context)?.add_attachment ??
+                    'Add Attachment',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
             ),
@@ -156,8 +170,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Next',
+                child: Text(
+                  AppLocalizations.of(context)?.next ?? 'Next',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,

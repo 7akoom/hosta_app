@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hosta_app/generated/app_localizations.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
-import 'package:hosta_app/data/models/category_model.dart';
 import 'package:hosta_app/data/models/service_model.dart';
+import 'package:hosta_app/data/models/category_model.dart';
 import 'package:hosta_app/shared/widgets/index.dart';
 
 class CategoryDetailsScreen extends StatefulWidget {
@@ -86,17 +87,27 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.category_details_page_title ??
+            'تفاصيل الفئة',
+      ),
       body: _isLoading
-          ? const LoadingWidget(message: 'Loading services...')
+          ? LoadingWidget(
+              message:
+                  AppLocalizations.of(context)?.loading_services ??
+                  'Loading services...',
+            )
           : _error != null
           ? CustomErrorWidget(
               message: _error!,
               onRetry: () => _loadMockServices(),
             )
           : _services.isEmpty
-          ? const EmptyWidget(
-              message: 'No services available for this category',
+          ? EmptyWidget(
+              message:
+                  AppLocalizations.of(context)?.no_services_available ??
+                  'No services available for this category',
               icon: Icons.work_outline,
             )
           : _buildContent(_services),
@@ -177,7 +188,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '${widget.category.serviceCount} services available',
+                            '${widget.category.serviceCount} ${AppLocalizations.of(context)?.services_available ?? 'services available'}',
                             style: TextStyle(
                               fontSize: 12,
                               color: AppColors.primaryBlue,
@@ -196,7 +207,8 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
 
           // Services Section
           Text(
-            'Available Services',
+            AppLocalizations.of(context)?.available_services ??
+                'Available Services',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,

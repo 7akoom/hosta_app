@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hosta_app/theme/app_colors.dart';
 import 'package:hosta_app/widgets/app_bar.dart' show SimpleAppBar;
+import 'package:hosta_app/generated/app_localizations.dart';
 
 class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
@@ -39,9 +40,12 @@ class _SupportScreenState extends State<SupportScreen> {
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Message Sent'),
-          content: const Text(
-            'Thank you for contacting us. We will get back to you soon.',
+          title: Text(
+            AppLocalizations.of(context)?.message_sent ?? 'Message Sent',
+          ),
+          content: Text(
+            AppLocalizations.of(context)?.thank_you_contacting_us ??
+                'Thank you for contacting us. We will get back to you soon.',
           ),
           actions: [
             TextButton(
@@ -49,7 +53,7 @@ class _SupportScreenState extends State<SupportScreen> {
                 Navigator.pop(context); // Close dialog
                 Navigator.pop(context); // Return to previous screen
               },
-              child: const Text('OK'),
+              child: Text(AppLocalizations.of(context)?.ok ?? 'OK'),
             ),
           ],
         ),
@@ -77,14 +81,18 @@ class _SupportScreenState extends State<SupportScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: const SimpleAppBar(),
+      appBar: SimpleAppBar(
+        title:
+            AppLocalizations.of(context)?.help_support_page_title ??
+            'المساعدة والدعم',
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Help & Support',
+              AppLocalizations.of(context)?.help_support ?? 'Help & Support',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -93,7 +101,8 @@ class _SupportScreenState extends State<SupportScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'How can we help you?',
+              AppLocalizations.of(context)?.how_can_we_help_you ??
+                  'How can we help you?',
               style: TextStyle(
                 color: isDark
                     ? AppColors.white.withAlpha((255 * 0.7).toInt())
@@ -122,15 +131,23 @@ class _SupportScreenState extends State<SupportScreen> {
                     TextFormField(
                       controller: _subjectController,
                       decoration: InputDecoration(
-                        labelText: 'Subject',
-                        hintText: 'What is your issue about?',
+                        labelText:
+                            AppLocalizations.of(context)?.subject ?? 'Subject',
+                        hintText:
+                            AppLocalizations.of(
+                              context,
+                            )?.what_is_your_issue_about ??
+                            'What is your issue about?',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a subject';
+                          return AppLocalizations.of(
+                                context,
+                              )?.please_enter_a_subject ??
+                              'Please enter a subject';
                         }
                         return null;
                       },
@@ -139,8 +156,13 @@ class _SupportScreenState extends State<SupportScreen> {
                     TextFormField(
                       controller: _messageController,
                       decoration: InputDecoration(
-                        labelText: 'Message',
-                        hintText: 'Describe your issue in detail',
+                        labelText:
+                            AppLocalizations.of(context)?.message ?? 'Message',
+                        hintText:
+                            AppLocalizations.of(
+                              context,
+                            )?.describe_your_issue_in_detail ??
+                            'Describe your issue in detail',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -149,10 +171,16 @@ class _SupportScreenState extends State<SupportScreen> {
                       maxLines: 5,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your message';
+                          return AppLocalizations.of(
+                                context,
+                              )?.please_enter_your_message ??
+                              'Please enter your message';
                         }
                         if (value.trim().length < 10) {
-                          return 'Message must be at least 10 characters long';
+                          return AppLocalizations.of(
+                                context,
+                              )?.message_must_be_at_least_10_characters ??
+                              'Message must be at least 10 characters long';
                         }
                         return null;
                       },
@@ -179,7 +207,10 @@ class _SupportScreenState extends State<SupportScreen> {
                                   ),
                                 ),
                               )
-                            : const Text('Send Message'),
+                            : Text(
+                                AppLocalizations.of(context)?.send_message ??
+                                    'Send Message',
+                              ),
                       ),
                     ),
                   ],
@@ -204,7 +235,8 @@ class _SupportScreenState extends State<SupportScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Contact Information',
+                    AppLocalizations.of(context)?.contact_information ??
+                        'Contact Information',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -215,16 +247,18 @@ class _SupportScreenState extends State<SupportScreen> {
                   _buildContactInfo(
                     context,
                     Icons.email_outlined,
-                    'Email',
-                    'support@hosta.com',
+                    AppLocalizations.of(context)?.email ?? 'Email',
+                    AppLocalizations.of(context)?.support_email ??
+                        'support@hosta.com',
                     isDark,
                   ),
                   const SizedBox(height: 12),
                   _buildContactInfo(
                     context,
                     Icons.phone_outlined,
-                    'Phone',
-                    '+1 234 567 890',
+                    AppLocalizations.of(context)?.phone ?? 'Phone',
+                    AppLocalizations.of(context)?.support_phone ??
+                        '+1 234 567 890',
                     isDark,
                   ),
                 ],
